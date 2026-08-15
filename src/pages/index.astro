@@ -1,22 +1,22 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
-import HomeIntro from '../components/HomeIntro.astro';
-import Gallery from '../components/Gallery.astro';
-import MusicCorner from '../components/MusicCorner.astro';
-import Countdown from '../components/Countdown.astro';
-import MiniGame from '../components/MiniGame.astro';
-import Quotes from '../components/Quotes.astro';
-import Notes from '../components/Notes.astro';
-import CollectibleCards from '../components/CollectibleCards.astro';
-import Merch from '../components/Merch.astro';
-import Community from '../components/Community.astro';
-import Footer from '../components/Footer.astro';
+import Layout from "../layouts/Layout.astro";
+import Navigation from "../components/Navigation.astro";
+import HomeIntro from "../components/HomeIntro.astro";
+import Gallery from "../components/Gallery.astro";
+import MusicCorner from "../components/MusicCorner.astro";
+import Countdown from "../components/Countdown.astro";
+import MiniGame from "../components/MiniGame.astro";
+import Quotes from "../components/Quotes.astro";
+import Notes from "../components/Notes.astro";
+import CollectibleCards from "../components/CollectibleCards.astro";
+import Merch from "../components/Merch.astro";
+import Community from "../components/Community.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Layout>
 	<Navigation />
-	<main>
+	<main class="main-layout">
 		<HomeIntro />
 		<Gallery />
 		<MusicCorner />
@@ -30,3 +30,37 @@ import Footer from '../components/Footer.astro';
 		<Footer />
 	</main>
 </Layout>
+
+<style is:global>
+	/* Reorder sections for mobile screens & Hide specific ones */
+	@media (max-width: 768px) {
+		/* Hide all components except HomeIntro, Quotes, Community, and Footer */
+		.main-layout > #gallery,
+		.main-layout > #music,
+		.main-layout > #countdown,
+		.main-layout > #game,
+		.main-layout > .notes-section,
+		.main-layout > .cards-section,
+		.main-layout > .merch-section {
+			display: none !important;
+		}
+
+		.main-layout {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.main-layout > #home {
+			order: 1;
+		}
+		.main-layout > #quotes {
+			order: 2;
+		}
+		.main-layout > .community-section {
+			order: 3;
+		}
+		.main-layout > footer {
+			order: 4;
+		}
+	}
+</style>

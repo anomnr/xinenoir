@@ -11,47 +11,52 @@
             <span class="bracket">┐</span>
         </div>
 
+        <!-- Hamburger Button (Mobile) -->
+        <button class="hamburger-btn" aria-label="Toggle Navigation">☰</button>
+
         <!-- Sisi Kanan: Navigasi -->
-        <div class="nav-grid">
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#home" class="glitch-link" data-value="HOME">HOME</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#gallery" class="glitch-link" data-value="GALLERY">GALLERY</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#music" class="glitch-link" data-value="MUSIC">MUSIC</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#countdown" class="glitch-link" data-value="COUNTDOWN">COUNTDOWN</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#game" class="glitch-link" data-value="GAME">GAME</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#quotes" class="glitch-link" data-value="QUOTES">QUOTES</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#notes" class="glitch-link" data-value="NOTES">NOTES</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#collection" class="glitch-link" data-value="COLLECTION">COLLECTION</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#merch" class="glitch-link" data-value="MERCH">MERCH</a>
-            </div>
-            <div class="nav-item">
-                <span class="box-icon">■</span>
-                <a href="#community" class="glitch-link" data-value="COMMUNITY">COMMUNITY</a>
+        <div class="nav-menu">
+            <div class="nav-grid">
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/" class="glitch-link" data-value="HOME">HOME</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/gallery" class="glitch-link" data-value="GALLERY">GALLERY</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/music" class="glitch-link" data-value="MUSIC">MUSIC</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/countdown" class="glitch-link" data-value="COUNTDOWN">COUNTDOWN</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/game" class="glitch-link" data-value="GAME">GAME</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/#quotes" class="glitch-link" data-value="QUOTES">QUOTES</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/notes" class="glitch-link" data-value="NOTES">NOTES</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/collection" class="glitch-link" data-value="COLLECTION">COLLECTION</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/merch" class="glitch-link" data-value="MERCH">MERCH</a>
+                </div>
+                <div class="nav-item">
+                    <span class="box-icon">■</span>
+                    <a href="/#community" class="glitch-link" data-value="COMMUNITY">COMMUNITY</a>
+                </div>
             </div>
         </div>
     </div>
@@ -88,15 +93,34 @@
         align-items: center;
         gap: 0.5rem;
         font-weight: 700;
-        font-size: 1.2rem; /* Smaller font for sleek look */
+        font-size: 1.4rem; /* Slightly larger for elegant font */
         color: #FFFFFF;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         line-height: 1;
+    }
+
+    .logo-text {
+        font-family: 'Times New Roman', Times, serif;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: 1.5px;
     }
 
     .bracket {
         color: rgba(255, 255, 255, 0.4);
         font-weight: 300;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Hamburger Menu Button */
+    .hamburger-btn {
+        display: none;
+        background: transparent;
+        border: none;
+        color: #FFFFFF;
+        font-size: 1.8rem;
+        cursor: pointer;
+        z-index: 2000;
     }
 
     /* Area Navigasi */
@@ -154,24 +178,64 @@
     }
 
     @media (max-width: 900px) {
-        .nav-container {
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-        }
         .nav-grid {
             grid-template-columns: repeat(3, 110px);
-            width: 100%;
-            justify-content: center;
-        }
-        .nav-item {
-            justify-content: flex-start;
         }
     }
 
-    @media (max-width: 600px) {
+    /* Mobile Hamburger Menu */
+    @media (max-width: 768px) {
+        .hamburger-btn {
+            display: block;
+        }
+
+        .brand-logo {
+            z-index: 2000; /* Keep logo above overlay */
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-100%);
+            transition: all 0.4s ease-in-out;
+            z-index: 1500;
+        }
+
+        .nav-menu.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
         .nav-grid {
-            grid-template-columns: repeat(2, 110px);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            justify-content: center;
+        }
+        
+        .glitch-link {
+            font-size: 1.2rem; /* Larger font for mobile readability */
+            text-align: center;
+        }
+        
+        .box-icon {
+            display: none; /* Hide boxes on mobile for cleaner look */
         }
     }
 </style>
@@ -179,8 +243,31 @@
 <script>
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!<>-_\\/[]{}—=+*^?";
     const links = document.querySelectorAll(".glitch-link");
+    const hamburgerBtn = document.querySelector(".hamburger-btn");
+    const navMenu = document.querySelector(".nav-menu");
 
+    // Hamburger Menu Logic
+    if (hamburgerBtn && navMenu) {
+        hamburgerBtn.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            if (navMenu.classList.contains("active")) {
+                hamburgerBtn.innerHTML = "✕";
+            } else {
+                hamburgerBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+    // Glitch Effect & Menu Close on Click
     links.forEach(link => {
+        link.addEventListener("click", () => {
+            // Close mobile menu when a link is clicked
+            if (navMenu?.classList.contains("active")) {
+                navMenu.classList.remove("active");
+                if (hamburgerBtn) hamburgerBtn.innerHTML = "☰";
+            }
+        });
+
         link.addEventListener("mouseenter", event => {
             let iterations = 0;
             const target = event.target as HTMLElement;

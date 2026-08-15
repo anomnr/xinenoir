@@ -1,6 +1,6 @@
 ---
 // src/components/Gallery.astro
-// Tahap 2: Gallery List dengan Cinematic Hover Image
+// Tahap 2: Gallery List dengan Cinematic Hover Image & Modal
 ---
 
 <section class="gallery-section" id="gallery">
@@ -40,12 +40,18 @@
             </div>
         </a>
     </div>
+
+    <!-- Cinematic Lightbox Modal -->
+    <div id="gallery-modal" class="gallery-modal">
+        <span class="modal-close">&times; CLOSE</span>
+        <img id="lightbox-img" src="" alt="Gallery Image Enlarge">
+    </div>
 </section>
 
 <style>
     .gallery-section {
         padding: 8rem 2rem;
-        background-color: var(--clr-deep-navy);
+        background-color: transparent;
         color: var(--clr-white);
         max-width: 1400px;
         margin: 0 auto;
@@ -172,4 +178,95 @@
             min-height: 250px;
         }
     }
+
+    /* Cinematic Modal Styles */
+    .gallery-modal {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        z-index: 9999;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+    }
+
+    .gallery-modal.modal-active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        color: var(--clr-white);
+        font-family: "Courier New", monospace;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        cursor: pointer;
+        z-index: 10000;
+        transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+        color: var(--clr-blue-accent);
+    }
+    
+    .gallery-modal img {
+        max-width: 90%;
+        max-height: 90vh;
+        border-radius: var(--radius-global);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        transform: scale(0.95);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .gallery-modal.modal-active img {
+        transform: scale(1);
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.bento-card');
+        const modal = document.getElementById('gallery-modal');
+        const modalImg = document.getElementById('lightbox-img');
+        const closeBtn = document.querySelector('.modal-close');
+
+        if (!modal || !modalImg || !closeBtn) return;
+
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const bgImg = card.querySelector('.bento-img') as HTMLElement;
+                if (!bgImg) return;
+                
+                const style = window.getComputedStyle(bgImg);
+                let url = style.backgroundImage;
+                // Extract URL from url("...")
+                if (url && url !== 'none') {
+                    url = url.slice(4, -1).replace(/"/g, "");
+                    (modalImg as HTMLImageElement).src = url;
+                    modal.classList.add('modal-active');
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('modal-active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('modal-active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('modal-active')) {
+                modal.classList.remove('modal-active');
+            }
+        });
+    });
+</script>

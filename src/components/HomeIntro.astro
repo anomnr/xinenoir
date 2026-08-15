@@ -11,11 +11,11 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     </video>
 
     <div class="hero-content">
-        <div class="logo-mark">N</div>
-        <h1 class="title">XineNoir</h1>
-        <p class="subtitle">echoes in the dark. where silence speaks.</p>
+        <p class="pre-title">Fanpage of Maxine Faye Lee</p>
+        <h1 class="title">XINENOIR</h1>
+        <p class="subtitle">Echoes in the dark. Where silence speaks and visual tells the unspoken truths. A cinematic journey through the lens of those who believe.</p>
         <div class="hashtag-wrapper">
-            <span class="hashtag">#MaxineKeren</span>
+            <span class="hashtag">#Trustinfaye</span>
         </div>
     </div>
 
@@ -42,11 +42,13 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     .hero-section {
         position: relative;
         width: 100%;
-        min-height: 100vh;
+        min-height: 100dvh; /* use 100dvh per guidelines */
         overflow: hidden;
-        display: flex;
-        align-items: center; /* Center the title area vertically */
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
         padding-left: clamp(2rem, 10vw, 15vw);
+        padding-right: 2rem;
         color: var(--clr-white);
     }
 
@@ -85,13 +87,15 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
         align-items: flex-start;
         gap: 1.5rem;
         max-width: 600px;
+        grid-column: 1; /* Force to left column */
     }
 
-    .logo-mark {
-        font-family: "Times New Roman", Times, serif;
-        font-size: clamp(3rem, 6vw, 4.5rem);
+    .pre-title {
+        font-family: 'Times New Roman', Times, serif;
         font-style: italic;
+        font-size: clamp(1rem, 2vw, 1.5rem);
         color: var(--clr-blue-light);
+        letter-spacing: 2px;
         opacity: 0;
         animation: cinematicFadeIn 2.5s ease-out 0.2s forwards;
         margin-bottom: -1rem;
@@ -109,13 +113,14 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     }
 
     .subtitle {
-        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
         font-weight: 300;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.1em;
         opacity: 0;
-        line-height: 1.6;
+        line-height: 1.8;
         animation: cinematicFadeIn 2.5s ease-out 1.5s forwards;
         color: rgba(255, 255, 255, 0.8);
+        max-width: 500px;
     }
 
     .hashtag-wrapper {
@@ -125,22 +130,26 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     }
 
     .hashtag {
-        font-size: 0.85rem;
-        font-family: "Courier New", monospace;
-        font-weight: bold;
+        font-size: 0.9rem;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
         color: var(--clr-white);
-        letter-spacing: 0.2em;
+        letter-spacing: 0.1em;
         border: 1px solid rgba(255, 255, 255, 0.3);
         padding: 0.8rem 2rem;
         transition: all 0.4s ease;
         backdrop-filter: blur(5px);
         text-transform: uppercase;
+        display: inline-block;
+        border-radius: var(--radius-global);
+        cursor: pointer;
     }
 
     .hashtag:hover {
         background: var(--clr-blue-accent);
         border-color: var(--clr-blue-accent);
         box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+        transform: scale(0.98);
     }
 
     @keyframes cinematicFadeIn {
@@ -219,6 +228,7 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
 
     @media (max-width: 768px) {
         .hero-section {
+            display: flex;
             justify-content: center;
             padding-left: 2rem;
             padding-right: 2rem;
