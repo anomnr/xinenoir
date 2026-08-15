@@ -1,0 +1,308 @@
+---
+// src/components/Notes.astro
+// Tahap 4: Sticky Notes / Fan Messages
+---
+
+<section class="notes-section">
+    <div class="header-box">
+        <h2 class="title">Echoes from Fans</h2>
+        <p class="subtitle">💌 Write a note for Maxine</p>
+    </div>
+
+    <div class="notes-board">
+        <div class="note-card add-note" id="addNoteBtn">
+            <span class="plus-icon">+</span>
+            <span>Tulis pesanmu untuk Maxine...</span>
+        </div>
+
+        <div class="note-card">
+            <p class="message">
+                "Terus bersinar Maxine! Penampilan semalam bener-bener cinematic
+                abis."
+            </p>
+            <span class="sender">- FanBoy99</span>
+        </div>
+
+        <div class="note-card highlight-note">
+            <p class="message">
+                "Noir concept suits you best. We will always support you
+                #MaxineKeren! Btw, I really loved the acoustic version you did on the last livestream. Please release a studio version!"
+            </p>
+            <span class="sender">- XineLovers</span>
+        </div>
+
+        <div class="note-card">
+            <p class="message">
+                "Can't wait for the next cover! Rewrite the stars was amazing."
+            </p>
+            <span class="sender">- MidnightBlue</span>
+        </div>
+
+        <div class="note-card">
+            <p class="message">
+                "Happy almost anniversary! 🖤"
+            </p>
+            <span class="sender">- SilentEcho</span>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="noteModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Write a Note</h3>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            <textarea class="note-input" placeholder="Tulis pesanmu untuk Maxine di sini..." rows="4"></textarea>
+            <input type="text" class="sender-input" placeholder="Namamu (Opsional)">
+            <button class="submit-note-btn">Kirim Pesan</button>
+        </div>
+    </div>
+</section>
+
+<style>
+    .notes-section {
+        padding: 8rem 2rem;
+        background-color: var(--clr-deep-navy);
+        color: var(--clr-white);
+    }
+
+    .header-box {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    .title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+    }
+    .subtitle {
+        font-family: "Courier New", monospace;
+        color: var(--clr-silver);
+        margin-top: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .notes-board {
+        column-count: 3;
+        column-gap: 1.5rem;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+        .notes-board {
+            column-count: 2;
+        }
+    }
+    @media (max-width: 600px) {
+        .notes-board {
+            column-count: 1;
+        }
+    }
+
+    .note-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        border-radius: var(--radius-global);
+        display: inline-block; /* Required for column masonry to not break cards */
+        width: 100%;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .note-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 6px 6px 0px var(--clr-blue-accent);
+    }
+
+    .highlight-note {
+        border-color: var(--clr-blue-accent);
+        background: rgba(37, 99, 235, 0.05);
+    }
+
+    .message {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        font-style: italic;
+        margin-bottom: 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .sender {
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        color: var(--clr-blue-light);
+        display: block;
+        text-align: right;
+    }
+
+    .add-note {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        background: transparent;
+        box-shadow: none;
+        min-height: 200px;
+    }
+    .add-note:hover {
+        border-color: var(--clr-blue-light);
+        background: rgba(255, 255, 255, 0.02);
+        box-shadow: none;
+        transform: scale(1.02);
+    }
+    .plus-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--clr-blue-light);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(5px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .modal-content {
+        background: #0f172a;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 2rem;
+        width: 90%;
+        max-width: 500px;
+        border-radius: var(--radius-global);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        transform: translateY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.hidden .modal-content {
+        transform: translateY(20px);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+        font-family: "Courier New", monospace;
+        letter-spacing: 2px;
+        color: var(--clr-blue-light);
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: var(--clr-white);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .note-input, .sender-input {
+        width: 100%;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: var(--clr-white);
+        padding: 1rem;
+        font-family: "Poppins", sans-serif;
+        border-radius: var(--radius-global);
+        margin-bottom: 1rem;
+        resize: vertical;
+    }
+    
+    .note-input::placeholder, .sender-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .note-input:focus, .sender-input:focus {
+        outline: none;
+        border-color: var(--clr-blue-accent);
+    }
+
+    .submit-note-btn {
+        width: 100%;
+        background: var(--clr-blue-accent);
+        color: var(--clr-white);
+        border: none;
+        padding: 1rem;
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+        letter-spacing: 2px;
+        cursor: pointer;
+        border-radius: var(--radius-global);
+        text-transform: uppercase;
+        transition: background 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .submit-note-btn:hover {
+        background: var(--clr-blue-light);
+        color: var(--clr-deep-navy);
+    }
+</style>
+
+<script>
+    const addNoteBtn = document.getElementById("addNoteBtn");
+    const modal = document.getElementById("noteModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const submitBtn = document.querySelector(".submit-note-btn");
+
+    if (addNoteBtn && modal && closeModalBtn && submitBtn) {
+        addNoteBtn.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                modal.classList.add("hidden");
+            }
+        });
+
+        submitBtn.addEventListener("click", () => {
+            const input = document.querySelector(".note-input") as HTMLTextAreaElement;
+            if(input.value.trim() === "") {
+                alert("Pesan tidak boleh kosong.");
+                return;
+            }
+            alert("Terima kasih! Pesanmu akan direview sebelum ditampilkan.");
+            input.value = "";
+            const sender = document.querySelector(".sender-input") as HTMLInputElement;
+            sender.value = "";
+            modal.classList.add("hidden");
+        });
+    }
+</script>

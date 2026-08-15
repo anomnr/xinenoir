@@ -1,0 +1,701 @@
+---
+// src/components/Countdown.astro
+// v2.0: Digital Dashboard — 5-Panel Futuristic Countdown
+// Data Sources (Web Search):
+//   - Maxine Faye Lee Birthday: 2 Desember 2011
+//   - Social Media Unlock (17th): 2 Desember 2028
+//   - JKT48 Gen 14 Debut: 14 Februari 2026
+---
+
+<section class="countdown-section" id="countdown">
+    <div class="dashboard-wrapper">
+        <!-- Section Header -->
+        <div class="dash-header">
+            <span class="dash-label">■ SYSTEM TIME & MILESTONES</span>
+            <h2 class="dash-title">CHRONICLES</h2>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Panel 1: Birthday Countdown (spans 2 cols) -->
+            <div class="dashboard-card card-birthday">
+                <div class="card-scanline"></div>
+                <div class="card-head">
+                    <span class="dot-live"></span>
+                    <span class="card-label">■ COUNTDOWN: MAXINE'S BIRTHDAY</span>
+                </div>
+                <div class="card-body">
+                    <div class="countdown-display" id="birthdayCountdown">
+                        <div class="time-block">
+                            <span class="time-num" id="bdDays">---</span>
+                            <span class="time-unit">DAYS</span>
+                        </div>
+                        <span class="time-sep">:</span>
+                        <div class="time-block">
+                            <span class="time-num" id="bdHours">--</span>
+                            <span class="time-unit">HRS</span>
+                        </div>
+                        <span class="time-sep">:</span>
+                        <div class="time-block">
+                            <span class="time-num" id="bdMins">--</span>
+                            <span class="time-unit">MIN</span>
+                        </div>
+                        <span class="time-sep">:</span>
+                        <div class="time-block">
+                            <span class="time-num" id="bdSecs">--</span>
+                            <span class="time-unit">SEC</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span>Target: <strong id="bdTargetDate">2 December 2026</strong></span>
+                    <span class="foot-tag">BORN 02.12.2011</span>
+                </div>
+            </div>
+
+            <!-- Panel 2: Social Media Unlock -->
+            <div class="dashboard-card card-socmed">
+                <div class="card-scanline"></div>
+                <div class="card-head">
+                    <span class="card-label">■ SOCIAL MEDIA UNLOCK</span>
+                </div>
+                <div class="card-body">
+                    <div class="countdown-display compact" id="socmedCountdown">
+                        <div class="time-block">
+                            <span class="time-num sm" id="smDays">---</span>
+                            <span class="time-unit">D</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="smHours">--</span>
+                            <span class="time-unit">H</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="smMins">--</span>
+                            <span class="time-unit">M</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="smSecs">--</span>
+                            <span class="time-unit">S</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span>Turns 17 on <strong>02.12.2028</strong></span>
+                </div>
+            </div>
+
+            <!-- Panel 3: JKT48 Journey (Count-Up) -->
+            <div class="dashboard-card card-journey">
+                <div class="card-head">
+                    <span class="card-label">■ JKT48 JOURNEY</span>
+                </div>
+                <div class="card-body">
+                    <div class="journey-display" id="journeyDisplay">
+                        <span class="journey-num" id="jYears">0</span>
+                        <span class="journey-label">Tahun,</span>
+                        <span class="journey-num" id="jMonths">0</span>
+                        <span class="journey-label">Bulan,</span>
+                        <span class="journey-num" id="jDays">0</span>
+                        <span class="journey-label">Hari</span>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span>Since debut <strong>14.02.2026</strong></span>
+                    <span class="foot-tag">GEN 14</span>
+                </div>
+            </div>
+
+            <!-- Panel 4: Next Event -->
+            <div class="dashboard-card card-event">
+                <div class="card-scanline"></div>
+                <div class="card-head">
+                    <span class="dot-live emerald"></span>
+                    <span class="card-label">■ NEXT EVENT</span>
+                </div>
+                <div class="card-body">
+                    <div class="countdown-display compact" id="eventCountdown">
+                        <div class="time-block">
+                            <span class="time-num sm event-num" id="evDays">---</span>
+                            <span class="time-unit">D</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm event-num" id="evHours">--</span>
+                            <span class="time-unit">H</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm event-num" id="evMins">--</span>
+                            <span class="time-unit">M</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm event-num" id="evSecs">--</span>
+                            <span class="time-unit">S</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span>JKT48 Theater Show — <strong>15.11.2026</strong></span>
+                    <span class="foot-tag emerald-tag">UPCOMING</span>
+                </div>
+            </div>
+
+            <!-- Panel 5: Anniversary -->
+            <div class="dashboard-card card-anniv">
+                <div class="card-head">
+                    <span class="card-label">■ ANNIVERSARY</span>
+                </div>
+                <div class="card-body">
+                    <div class="countdown-display compact" id="annivCountdown">
+                        <div class="time-block">
+                            <span class="time-num sm" id="anDays">---</span>
+                            <span class="time-unit">D</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="anHours">--</span>
+                            <span class="time-unit">H</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="anMins">--</span>
+                            <span class="time-unit">M</span>
+                        </div>
+                        <span class="time-sep sm">:</span>
+                        <div class="time-block">
+                            <span class="time-num sm" id="anSecs">--</span>
+                            <span class="time-unit">S</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-foot">
+                    <span>Next debut anniversary: <strong id="anTargetDate">14.02.2027</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* ============================
+       SECTION
+    ============================ */
+    .countdown-section {
+        padding: 6rem 2rem;
+        background-color: var(--clr-deep-navy);
+        color: var(--clr-white);
+        display: flex;
+        justify-content: center;
+        position: relative;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .dashboard-wrapper {
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    /* ============================
+       HEADER
+    ============================ */
+    .dash-header {
+        margin-bottom: 3rem;
+        text-align: left;
+    }
+
+    .dash-label {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 11px;
+        color: var(--clr-silver);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .dash-title {
+        font-family: "Poppins", sans-serif;
+        font-size: clamp(2rem, 4.5vw, 3.5rem);
+        font-weight: 700;
+        margin-top: 0.5rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    /* ============================
+       GRID
+    ============================ */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* ============================
+       CARD BASE (Glassmorphism)
+    ============================ */
+    .dashboard-card {
+        position: relative;
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-global);
+        padding: 1.5rem;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.75rem;
+        transition: transform 0.3s ease,
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+        border-color: rgba(96, 165, 250, 0.25);
+        transform: translateY(-4px);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5),
+                    0 8px 30px rgba(37, 99, 235, 0.12);
+    }
+
+    /* ============================
+       CARD VARIANTS
+    ============================ */
+
+    /* Birthday — spans full width */
+    .card-birthday {
+        grid-column: 1 / -1;
+        background: rgba(37, 99, 235, 0.04);
+        border-color: rgba(37, 99, 235, 0.2);
+        padding: 2rem 2.5rem;
+        box-shadow: inset 0 0 40px rgba(37, 99, 235, 0.06);
+    }
+
+    .card-birthday:hover {
+        border-color: rgba(96, 165, 250, 0.4);
+        box-shadow: inset 0 0 40px rgba(37, 99, 235, 0.08),
+                    0 8px 40px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Event — emerald tint */
+    .card-event {
+        background: radial-gradient(
+            ellipse at bottom right,
+            rgba(16, 185, 129, 0.06) 0%,
+            rgba(15, 23, 42, 0.6) 70%
+        );
+        border-color: rgba(16, 185, 129, 0.15);
+    }
+
+    .card-event:hover {
+        border-color: rgba(16, 185, 129, 0.35);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5),
+                    0 8px 30px rgba(16, 185, 129, 0.1);
+    }
+
+    /* Journey — solid dark */
+    .card-journey {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    /* ============================
+       CARD HEADER
+    ============================ */
+    .card-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 2;
+    }
+
+    .card-label {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 10px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--clr-silver);
+    }
+
+    /* Live dot */
+    .dot-live {
+        width: 7px;
+        height: 7px;
+        background: var(--clr-blue-light);
+        border-radius: 50%;
+        animation: pulse-dot 1.5s ease-in-out infinite;
+        box-shadow: 0 0 8px var(--clr-blue-light);
+        flex-shrink: 0;
+    }
+
+    .dot-live.emerald {
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+    }
+
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+    }
+
+    /* ============================
+       CARD BODY — Countdown Numbers
+    ============================ */
+    .card-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .countdown-display {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .countdown-display.compact {
+        gap: 0.3rem;
+    }
+
+    .time-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .time-num {
+        font-family: "Courier New", Courier, monospace;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        color: var(--clr-blue-light);
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+                     0 0 40px rgba(59, 130, 246, 0.15);
+        line-height: 1;
+        min-width: 2ch;
+        text-align: center;
+    }
+
+    .time-num.sm {
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        min-width: 2ch;
+    }
+
+    .time-unit {
+        font-family: "Poppins", sans-serif;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.35);
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+
+    .time-sep {
+        font-family: "Courier New", Courier, monospace;
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: rgba(255, 255, 255, 0.15);
+        line-height: 1;
+        align-self: flex-start;
+        margin-top: 0.1em;
+    }
+
+    .time-sep.sm {
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    }
+
+    /* Event numbers — emerald */
+    .event-num {
+        color: #10b981;
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.4),
+                     0 0 40px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Journey display */
+    .journey-display {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .journey-num {
+        font-family: "Courier New", Courier, monospace;
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        font-weight: 700;
+        color: var(--clr-blue-light);
+        text-shadow: 0 0 15px rgba(59, 130, 246, 0.35);
+        line-height: 1;
+    }
+
+    .journey-label {
+        font-family: "Poppins", sans-serif;
+        font-size: 12px;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.5px;
+    }
+
+    /* ============================
+       CARD FOOTER
+    ============================ */
+    .card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding-top: 0.75rem;
+        z-index: 2;
+        font-family: "Poppins", sans-serif;
+        font-size: 11px;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.3px;
+    }
+
+    .card-foot strong {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+    }
+
+    .foot-tag {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        padding: 3px 8px;
+        border: 1px solid rgba(96, 165, 250, 0.2);
+        color: var(--clr-blue-light);
+        flex-shrink: 0;
+    }
+
+    .foot-tag.emerald-tag {
+        border-color: rgba(16, 185, 129, 0.25);
+        color: #10b981;
+    }
+
+    /* ============================
+       SCANLINE OVERLAY
+    ============================ */
+    .card-scanline {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 2px,
+            rgba(96, 165, 250, 0.015) 2px,
+            rgba(96, 165, 250, 0.015) 4px
+        );
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* ============================
+       RESPONSIVE
+    ============================ */
+    @media (max-width: 900px) {
+        .countdown-section {
+            padding: 4rem 1.25rem;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-birthday {
+            grid-column: 1;
+            padding: 1.5rem;
+        }
+
+        .time-num {
+            font-size: clamp(2rem, 8vw, 3rem);
+        }
+
+        .time-num.sm {
+            font-size: clamp(1.3rem, 6vw, 1.8rem);
+        }
+
+        .countdown-display {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .card-foot {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.4rem;
+        }
+    }
+</style>
+
+<script>
+    // ========================================
+    // DATA CONSTANTS
+    // ========================================
+    const BIRTHDAY_MONTH = 12; // December
+    const BIRTHDAY_DAY = 2;
+    const BIRTH_YEAR = 2011;
+    const SOCIAL_UNLOCK_YEAR = BIRTH_YEAR + 17; // 2028
+    const DEBUT_DATE = new Date(2026, 1, 14); // Feb 14, 2026
+    const NEXT_EVENT_DATE = new Date(2026, 10, 15, 19, 0, 0); // Nov 15, 2026, 19:00
+
+    // ========================================
+    // HELPER: Get next occurrence of a date
+    // ========================================
+    function getNextOccurrence(month, day) {
+        const now = new Date();
+        let year = now.getFullYear();
+        const target = new Date(year, month - 1, day);
+        if (target.getTime() <= now.getTime()) {
+            target.setFullYear(year + 1);
+        }
+        return target;
+    }
+
+    // ========================================
+    // HELPER: Get next anniversary of debut
+    // ========================================
+    function getNextAnniversary() {
+        const now = new Date();
+        let year = now.getFullYear();
+        const anniv = new Date(year, DEBUT_DATE.getMonth(), DEBUT_DATE.getDate());
+        if (anniv.getTime() <= now.getTime()) {
+            anniv.setFullYear(year + 1);
+        }
+        return anniv;
+    }
+
+    // ========================================
+    // HELPER: Diff in D, H, M, S
+    // ========================================
+    function getTimeDiff(target) {
+        const now = new Date();
+        let diff = target.getTime() - now.getTime();
+        const past = diff < 0;
+        diff = Math.abs(diff);
+
+        const s = Math.floor(diff / 1000) % 60;
+        const m = Math.floor(diff / (1000 * 60)) % 60;
+        const h = Math.floor(diff / (1000 * 60 * 60)) % 24;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        return { d, h, m, s, past };
+    }
+
+    // ========================================
+    // HELPER: Journey duration (count-up)
+    // ========================================
+    function getJourneyDuration() {
+        const now = new Date();
+        let years = now.getFullYear() - DEBUT_DATE.getFullYear();
+        let months = now.getMonth() - DEBUT_DATE.getMonth();
+        let days = now.getDate() - DEBUT_DATE.getDate();
+
+        if (days < 0) {
+            months--;
+            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            days += prevMonth.getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        return { years: Math.max(0, years), months: Math.max(0, months), days: Math.max(0, days) };
+    }
+
+    // ========================================
+    // DOM ELEMENTS
+    // ========================================
+    const bdDays = document.getElementById('bdDays');
+    const bdHours = document.getElementById('bdHours');
+    const bdMins = document.getElementById('bdMins');
+    const bdSecs = document.getElementById('bdSecs');
+    const bdTarget = document.getElementById('bdTargetDate');
+
+    const smDays = document.getElementById('smDays');
+    const smHours = document.getElementById('smHours');
+    const smMins = document.getElementById('smMins');
+    const smSecs = document.getElementById('smSecs');
+
+    const jYears = document.getElementById('jYears');
+    const jMonths = document.getElementById('jMonths');
+    const jDays = document.getElementById('jDays');
+
+    const evDays = document.getElementById('evDays');
+    const evHours = document.getElementById('evHours');
+    const evMins = document.getElementById('evMins');
+    const evSecs = document.getElementById('evSecs');
+
+    const anDays = document.getElementById('anDays');
+    const anHours = document.getElementById('anHours');
+    const anMins = document.getElementById('anMins');
+    const anSecs = document.getElementById('anSecs');
+    const anTarget = document.getElementById('anTargetDate');
+
+    // ========================================
+    // PAD NUMBER
+    // ========================================
+    function pad(n, len = 2) {
+        return String(n).padStart(len, '0');
+    }
+
+    // ========================================
+    // UPDATE FUNCTION
+    // ========================================
+    function updateAll() {
+        // Panel 1: Birthday
+        const nextBirthday = getNextOccurrence(BIRTHDAY_MONTH, BIRTHDAY_DAY);
+        const bd = getTimeDiff(nextBirthday);
+        if (bdDays) bdDays.textContent = pad(bd.d, 3);
+        if (bdHours) bdHours.textContent = pad(bd.h);
+        if (bdMins) bdMins.textContent = pad(bd.m);
+        if (bdSecs) bdSecs.textContent = pad(bd.s);
+        if (bdTarget) {
+            const months = ['January','February','March','April','May','June',
+                           'July','August','September','October','November','December'];
+            bdTarget.textContent = `${BIRTHDAY_DAY} ${months[BIRTHDAY_MONTH - 1]} ${nextBirthday.getFullYear()}`;
+        }
+
+        // Panel 2: Social Media Unlock
+        const socmedDate = new Date(SOCIAL_UNLOCK_YEAR, BIRTHDAY_MONTH - 1, BIRTHDAY_DAY);
+        const sm = getTimeDiff(socmedDate);
+        if (smDays) smDays.textContent = pad(sm.d, 3);
+        if (smHours) smHours.textContent = pad(sm.h);
+        if (smMins) smMins.textContent = pad(sm.m);
+        if (smSecs) smSecs.textContent = pad(sm.s);
+
+        // Panel 3: JKT48 Journey
+        const journey = getJourneyDuration();
+        if (jYears) jYears.textContent = String(journey.years);
+        if (jMonths) jMonths.textContent = String(journey.months);
+        if (jDays) jDays.textContent = String(journey.days);
+
+        // Panel 4: Next Event
+        const ev = getTimeDiff(NEXT_EVENT_DATE);
+        if (evDays) evDays.textContent = pad(ev.d, 3);
+        if (evHours) evHours.textContent = pad(ev.h);
+        if (evMins) evMins.textContent = pad(ev.m);
+        if (evSecs) evSecs.textContent = pad(ev.s);
+
+        // Panel 5: Anniversary
+        const nextAnniv = getNextAnniversary();
+        const an = getTimeDiff(nextAnniv);
+        if (anDays) anDays.textContent = pad(an.d, 3);
+        if (anHours) anHours.textContent = pad(an.h);
+        if (anMins) anMins.textContent = pad(an.m);
+        if (anSecs) anSecs.textContent = pad(an.s);
+        if (anTarget) {
+            anTarget.textContent = `14.02.${nextAnniv.getFullYear()}`;
+        }
+    }
+
+    // Initial render + interval
+    updateAll();
+    setInterval(updateAll, 1000);
+</script>

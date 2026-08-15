@@ -1,0 +1,253 @@
+---
+// src/components/HomeIntro.astro
+import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ Maxine.mp4";
+---
+
+<section class="hero-section" id="home">
+    <div class="video-overlay"></div>
+
+    <video autoplay loop muted playsinline class="background-video">
+        <source src={maxineProfileVideo} type="video/mp4" />
+    </video>
+
+    <div class="hero-content">
+        <div class="logo-mark">N</div>
+        <h1 class="title">XineNoir</h1>
+        <p class="subtitle">echoes in the dark. where silence speaks.</p>
+        <div class="hashtag-wrapper">
+            <span class="hashtag">#MaxineKeren</span>
+        </div>
+    </div>
+
+    <aside class="biodata-card">
+        <div class="biodata-item">
+            <span class="biodata-label">NAME</span>
+            <span class="biodata-val">Maxine Faye Lee (Maxine)</span>
+        </div>
+        <div class="biodata-item">
+            <span class="biodata-label">GEN</span>
+            <span class="biodata-val">14th Generation JKT48</span>
+        </div>
+        <div class="biodata-item">
+            <span class="biodata-label">DOB</span>
+            <span class="biodata-val">December 2, 2011</span>
+        </div>
+        <div class="biodata-catchphrase">
+            "Faith, trust, and magical pixie dust. Hai, aku Maxine!"
+        </div>
+    </aside>
+</section>
+
+<style>
+    .hero-section {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center; /* Center the title area vertically */
+        padding-left: clamp(2rem, 10vw, 15vw);
+        color: var(--clr-white);
+    }
+
+    .background-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -2;
+        filter: grayscale(100%) contrast(110%) brightness(0.5);
+        background-color: var(--clr-deep-navy);
+    }
+
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            rgba(15, 23, 42, 1) 0%,
+            rgba(15, 23, 42, 0.7) 40%,
+            rgba(15, 23, 42, 0.2) 100%
+        );
+        z-index: -1;
+    }
+
+    .hero-content {
+        text-align: left;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        max-width: 600px;
+    }
+
+    .logo-mark {
+        font-family: "Times New Roman", Times, serif;
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        font-style: italic;
+        color: var(--clr-blue-light);
+        opacity: 0;
+        animation: cinematicFadeIn 2.5s ease-out 0.2s forwards;
+        margin-bottom: -1rem;
+    }
+
+    .title {
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 0;
+        text-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+        opacity: 0;
+        animation: cinematicFadeIn 2s ease-out 0.8s forwards;
+    }
+
+    .subtitle {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-weight: 300;
+        letter-spacing: 0.2em;
+        opacity: 0;
+        line-height: 1.6;
+        animation: cinematicFadeIn 2.5s ease-out 1.5s forwards;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .hashtag-wrapper {
+        margin-top: 1.5rem;
+        opacity: 0;
+        animation: cinematicFadeIn 2s ease-out 2.2s forwards;
+    }
+
+    .hashtag {
+        font-size: 0.85rem;
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+        color: var(--clr-white);
+        letter-spacing: 0.2em;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 0.8rem 2rem;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(5px);
+        text-transform: uppercase;
+    }
+
+    .hashtag:hover {
+        background: var(--clr-blue-accent);
+        border-color: var(--clr-blue-accent);
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+    }
+
+    @keyframes cinematicFadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+            filter: blur(5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+            filter: blur(0);
+        }
+    }
+
+    /* Area Biodata Glassmorphism */
+    .biodata-card {
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 12px; /* var(--radius-global) fallback */
+        max-width: 350px;
+        z-index: 10;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        animation: cinematicFadeIn 2s ease-out 2.5s forwards;
+    }
+    
+    .biodata-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        gap: 1.5rem; /* Memberikan spasi yang jelas antara label dan nilai */
+    }
+    
+    .biodata-label {
+        color: #60A5FA; /* Biru terang */
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    
+    .biodata-val {
+        color: var(--clr-white);
+        text-align: right;
+    }
+    
+    .biodata-catchphrase {
+        margin-top: 1.2rem;
+        padding-top: 1.2rem;
+        border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        font-family: "Poppins", sans-serif;
+        font-style: italic;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+        .biodata-card {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            margin-top: 3rem;
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            justify-content: center;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-top: 5rem;
+            flex-direction: column;
+        }
+        .hero-content {
+            text-align: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .video-overlay {
+            background: linear-gradient(
+                to bottom,
+                rgba(15, 23, 42, 0.8) 0%,
+                rgba(15, 23, 42, 0.9) 100%
+            );
+        }
+        @keyframes cinematicFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+    }
+</style>

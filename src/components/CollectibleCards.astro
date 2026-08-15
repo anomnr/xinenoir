@@ -1,0 +1,214 @@
+---
+// src/components/CollectibleCards.astro
+// Tahap 4: Digital Collectible System
+---
+
+<section class="cards-section">
+    <div class="header-box">
+        <h2 class="title">Digital Collection</h2>
+        <p class="subtitle">Collect them all! Watch live to unlock.</p>
+    </div>
+
+    <div class="cards-container">
+        <div class="collect-card unlocked">
+            <div class="card-glare"></div>
+            <div class="card-image"></div>
+            <div class="card-info">
+                <span class="card-id">#001</span>
+                <h4 class="card-name">First Live</h4>
+                <span class="status">✨ Unlocked</span>
+            </div>
+        </div>
+
+        <div class="collect-card unlocked">
+            <div class="card-glare"></div>
+            <div class="card-image alt-img"></div>
+            <div class="card-info">
+                <span class="card-id">#002</span>
+                <h4 class="card-name">Special Moment</h4>
+                <span class="status">✨ Unlocked</span>
+            </div>
+        </div>
+
+        <div class="collect-card locked">
+            <div class="card-glare"></div>
+            <div class="lock-icon">🔒</div>
+            <div class="card-info">
+                <span class="card-id">#003</span>
+                <h4 class="card-name">Performance</h4>
+                <span class="status">???</span>
+            </div>
+        </div>
+
+        <div class="collect-card locked">
+            <div class="card-glare"></div>
+            <div class="lock-icon">🔒</div>
+            <div class="card-info">
+                <span class="card-id">#004</span>
+                <h4 class="card-name">Birthday</h4>
+                <span class="status">???</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .cards-section {
+        padding: 8rem 2rem;
+        background-color: var(--clr-deep-navy);
+        color: var(--clr-white);
+    }
+
+    .header-box {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    .title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    .subtitle {
+        font-family: "Courier New", monospace;
+        color: var(--clr-blue-light);
+        margin-top: 0.5rem;
+    }
+
+    .cards-container {
+        display: flex;
+        gap: 2.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .collect-card {
+        width: 240px;
+        height: 350px;
+        border-radius: var(--radius-global);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        background: #111;
+        cursor: pointer;
+    }
+
+    .collect-card:hover {
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3), 0 0 20px rgba(255,255,255,0.1);
+        z-index: 10;
+    }
+
+    /* Holographic Glare Effect */
+    .card-glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            115deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.03) 20%,
+            rgba(255, 255, 255, 0.1) 40%,
+            rgba(96, 165, 250, 0.2) 50%,
+            rgba(255, 255, 255, 0.1) 60%,
+            transparent 80%
+        );
+        transform: translateX(-100%) translateY(-100%) rotate(30deg);
+        transition: transform 0.8s ease-out;
+        pointer-events: none;
+        z-index: 5;
+        mix-blend-mode: hard-light;
+    }
+
+    .collect-card:hover .card-glare {
+        transform: translateX(10%) translateY(10%) rotate(30deg);
+    }
+
+    .card-image {
+        height: 70%;
+        background: url("https://images.unsplash.com/photo-1516280440502-613ecfbb6f27?q=80&w=400&auto=format&fit=crop")
+            center/cover;
+        filter: grayscale(100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: filter 0.4s ease;
+    }
+
+    .collect-card:hover .card-image {
+        filter: grayscale(30%) contrast(120%);
+    }
+
+    .alt-img {
+        background-image: url("https://images.unsplash.com/photo-1598387993441-a3637e10669d?q=80&w=400&auto=format&fit=crop");
+    }
+
+    .card-info {
+        height: 30%;
+        background: linear-gradient(to bottom, #111, #0a0a0a);
+        padding: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+    .card-id {
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: var(--clr-silver);
+        letter-spacing: 1px;
+    }
+    .card-name {
+        font-size: 1.1rem;
+        margin: 0.3rem 0;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .unlocked {
+        border-color: rgba(96, 165, 250, 0.5);
+    }
+    .unlocked .status {
+        font-size: 0.85rem;
+        color: #10b981;
+        font-weight: bold;
+        text-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+    }
+
+    .locked {
+        background: #151515;
+        border: 1px dashed rgba(255,255,255,0.2);
+    }
+    .locked:hover {
+        border-color: var(--clr-white);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+    .lock-icon {
+        height: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        opacity: 0.2;
+        background: #111;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .locked:hover .lock-icon {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+    .locked .status {
+        font-size: 0.85rem;
+        color: var(--clr-silver);
+        font-family: monospace;
+        letter-spacing: 2px;
+    }
+</style>

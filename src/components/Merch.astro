@@ -1,0 +1,46 @@
+---
+// src/components/Merch.astro
+// Tahap 4: Merchandise Placeholder
+---
+
+<section class="merch-section">
+    <div class="merch-box">
+        <div class="glitch-wrapper">
+            <h2 class="coming-soon">Coming Soon</h2>
+        </div>
+        <p class="merch-text">— Maxine Merchandise & Fan Project —</p>
+    </div>
+</section>
+
+<style>
+    .merch-section {
+        padding: 8rem 2rem;
+        background-color: var(--clr-deep-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .merch-box {
+        text-align: center;
+    }
+
+    .coming-soon {
+        font-size: clamp(3rem, 6vw, 5rem);
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--clr-white);
+        opacity: 0.8;
+    }
+
+    .merch-text {
+        font-family: "Courier New", monospace;
+        font-size: 1rem;
+        color: var(--clr-silver);
+        margin-top: 1rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+</style>

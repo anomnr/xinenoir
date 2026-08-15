@@ -1,0 +1,86 @@
+---
+// src/components/Community.astro
+// Tahap 4: CTA Community
+---
+
+<section class="community-section">
+    <div class="cta-container">
+        <h2 class="cta-title">Join the Have Fun!</h2>
+        <p class="cta-desc">Gabung dan seru-seruan bareng fanbase Maxine.</p>
+        <a href="#" class="wa-btn">
+            JOIN WHATSAPP ↗
+        </a>
+    </div>
+</section>
+
+<style>
+    .community-section {
+        padding: 8rem 2rem;
+        background: var(--clr-deep-navy);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .community-section::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 200px;
+        height: 1px;
+        background: var(--clr-blue-accent);
+    }
+
+    .cta-container {
+        position: relative;
+        z-index: 2;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .cta-title {
+        font-family: "Poppins", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .cta-desc {
+        font-size: 1.2rem;
+        color: var(--clr-silver);
+        margin-bottom: 3.5rem;
+        font-family: "Courier New", monospace;
+    }
+
+    .wa-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--clr-blue-accent);
+        color: var(--clr-white);
+        text-decoration: none;
+        padding: 1.2rem 3rem;
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        border-radius: var(--radius-global);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .wa-btn:hover {
+        background: var(--clr-blue-light);
+        color: var(--clr-deep-navy);
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+        transform: translateY(-2px);
+    }
+</style>
