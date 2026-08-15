@@ -1,6 +1,6 @@
 ---
 // src/components/MiniGame.astro
-// Tahap 3: Interaktif Mini Game
+// Tahap 3: Interaktif Mini Game (QnA)
 ---
 
 <section class="minigame-section" id="game">
@@ -10,31 +10,25 @@
     </div>
 
     <div class="game-board">
-        <div class="question-area">
-            <div class="silhouette-box">
-                <span class="question-mark">?</span>
+        <div id="quiz-area">
+            <div class="question-area">
+                <div class="silhouette-box">
+                    <span class="question-mark">?</span>
+                </div>
+                <p class="question-text" id="question-text">
+                    Loading question...
+                </p>
             </div>
-            <p class="question-text">
-                Tebak Momen: Di acara apa Maxine memberikan ekspresi ini?
-            </p>
+            <div class="options-area" id="quiz-options">
+                <!-- Opsi jawaban akan dirender di sini via JS -->
+            </div>
         </div>
 
-        <div class="options-area" id="quiz-options">
-            <button class="option-btn" data-answer="wrong">
-                <span class="opt-letter">A</span>
-                <span class="opt-text">First Live Performance</span>
-            </button>
-            <button class="option-btn" data-answer="correct">
-                <span class="opt-letter">B</span>
-                <span class="opt-text">Special Anniversary Event</span>
-            </button>
-            <button class="option-btn" data-answer="wrong">
-                <span class="opt-letter">C</span>
-                <span class="opt-text">Behind The Scene MV</span>
-            </button>
+        <div id="result-area" class="result-box hidden">
+            <div class="score-display" id="result-score">0/6</div>
+            <p class="result-message" id="result-message">Message</p>
+            <button id="restart-btn" class="restart-btn">Main Lagi</button>
         </div>
-
-        <div id="game-result" class="result-box hidden"></div>
     </div>
 </section>
 
@@ -45,7 +39,7 @@
         color: var(--clr-white);
         max-width: 800px;
         margin: 0 auto;
-        font-family: "Poppins", sans-serif;
+        font-family: var(--font-body);
     }
 
     .header-box {
@@ -68,8 +62,10 @@
     }
 
     .game-board {
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: var(--radius-global);
         padding: 4rem 2rem;
         text-align: center;
@@ -94,9 +90,9 @@
     }
 
     .silhouette-box {
-        width: 200px;
-        height: 200px;
-        background: #000;
+        width: 180px;
+        height: 180px;
+        background: rgba(0, 0, 0, 0.5);
         margin: 0 auto 2rem;
         border-radius: var(--radius-global);
         display: flex;
@@ -131,17 +127,18 @@
         margin-bottom: 2.5rem;
         font-weight: 500;
         letter-spacing: 1px;
+        min-height: 3.6rem;
     }
 
     .options-area {
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 1rem;
         max-width: 500px;
         margin: 0 auto;
     }
 
-    .option-btn {
+    :global(.option-btn) {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: var(--clr-white);
@@ -157,13 +154,17 @@
         text-align: left;
     }
 
-    .option-btn:hover {
+    :global(.option-btn:hover:not(:disabled)) {
         background: rgba(255, 255, 255, 0.15);
         border-color: var(--clr-blue-light);
         transform: translateX(10px);
     }
 
-    .opt-letter {
+    :global(.option-btn:disabled) {
+        cursor: not-allowed;
+    }
+
+    :global(.opt-letter) {
         font-family: "Courier New", monospace;
         background: rgba(255, 255, 255, 0.1);
         padding: 5px 12px;
@@ -171,44 +172,84 @@
         font-weight: bold;
         color: var(--clr-blue-light);
         flex-shrink: 0;
+        transition: all 0.3s ease;
     }
 
-    .opt-text {
+    :global(.opt-text) {
         flex-grow: 1;
     }
 
-    .option-btn.correct {
-        background: rgba(16, 185, 129, 0.1);
-        border-color: #10b981;
-        color: #fff;
-        transform: translateX(0);
-        box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    /* Target state classes with important to override specificity */
+    :global(.option-btn.correct) {
+        background-color: #10B981 !important;
+        color: white !important;
+        border-color: #10B981 !important;
     }
-    .option-btn.correct .opt-letter {
-        background: #10b981;
-        color: #fff;
+    :global(.option-btn.correct .opt-letter) {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
     }
 
-    .option-btn.wrong {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: #ef4444;
-        color: #fff;
-        transform: translateX(0);
+    :global(.option-btn.incorrect) {
+        background-color: #EF4444 !important;
+        color: white !important;
+        border-color: #EF4444 !important;
     }
-    .option-btn.wrong .opt-letter {
-        background: #ef4444;
-        color: #fff;
+    :global(.option-btn.incorrect .opt-letter) {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
     }
 
     .result-box {
-        margin-top: 2.5rem;
-        padding: 1.5rem;
-        border-radius: var(--radius-global);
-        font-weight: 600;
-        font-size: 1.2rem;
-        animation: slideUp 0.4s ease-out;
+        animation: slideUp 0.5s ease-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
     }
 
+    .score-display {
+        font-size: 4rem;
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+        color: var(--clr-blue-light);
+        text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+    }
+
+    .result-message {
+        font-size: 1.3rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    .restart-btn {
+        background: var(--clr-blue-accent);
+        color: var(--clr-white);
+        border: none;
+        padding: 1rem 2.5rem;
+        font-family: inherit;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: var(--radius-global);
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        white-space: nowrap;
+    }
+
+    .restart-btn:hover {
+        background: var(--clr-blue-light);
+        transform: scale(0.98);
+    }
+
+    .restart-btn:active {
+        transform: scale(0.95);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+    
     @keyframes slideUp {
         from {
             opacity: 0;
@@ -219,43 +260,150 @@
             transform: translateY(0);
         }
     }
-
-    .result-box.success {
-        background: rgba(16, 185, 129, 0.15);
-        color: #10b981;
-        border: 1px solid #10b981;
-        box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
-    }
-    .result-box.error {
-        background: rgba(239, 68, 68, 0.15);
-        color: #ef4444;
-        border: 1px solid #ef4444;
-    }
-    .hidden {
-        display: none;
-    }
 </style>
 
 <script>
-    const buttons = document.querySelectorAll(".option-btn");
-    const resultBox = document.getElementById("game-result");
+    const questions = [
+        {
+            question: "Di Tanggal berapa Maxine berulang tahun?",
+            options: [
+                { text: "10 February 2013", isCorrect: false },
+                { text: "6 juni 2012", isCorrect: false },
+                { text: "2 desember 2011", isCorrect: true }
+            ]
+        },
+        {
+            question: "Seperti apakah jiko nya Maxine?",
+            options: [
+                { text: "Faith, Trust, and Magical pixie dust.", isCorrect: true },
+                { text: "Sekali senyum langsung buatmu jatuh cinta", isCorrect: false },
+                { text: "Datang bawa tawa, pulang bawa rindu.", isCorrect: false }
+            ]
+        },
+        {
+            question: "Darimanakah Maxine berasal?",
+            options: [
+                { text: "Jakarta", isCorrect: true },
+                { text: "Garut", isCorrect: false },
+                { text: "Surabaya", isCorrect: false }
+            ]
+        },
+        {
+            question: "Sebutkan Zodiac nya Maxine!",
+            options: [
+                { text: "Sagittarius", isCorrect: true },
+                { text: "Pisces", isCorrect: false },
+                { text: "Libra", isCorrect: false }
+            ]
+        },
+        {
+            question: "Setlist Apa Yang di bawakan Maxine?",
+            options: [
+                { text: "Junjou Shugi", isCorrect: false },
+                { text: "Pajama Drive", isCorrect: true },
+                { text: "Tenshi no Shippo", isCorrect: false }
+            ]
+        },
+        {
+            question: "Sebutkan nama panjang Maxine!",
+            options: [
+                { text: "Maxine Van Irwan", isCorrect: false },
+                { text: "Maxine Gabriella", isCorrect: false },
+                { text: "Maxine Faye Lee", isCorrect: true }
+            ]
+        }
+    ];
 
-    buttons.forEach((btn) => {
-        btn.addEventListener("click", function () {
-            buttons.forEach((b) => b.classList.remove("correct", "wrong"));
-            resultBox.classList.remove("hidden", "success", "error");
+    let currentQuestionIndex = 0;
+    let score = 0;
 
-            const isCorrect = this.getAttribute("data-answer") === "correct";
+    const quizArea = document.getElementById("quiz-area");
+    const resultArea = document.getElementById("result-area");
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("quiz-options");
+    const resultScore = document.getElementById("result-score");
+    const resultMessage = document.getElementById("result-message");
+    const restartBtn = document.getElementById("restart-btn");
 
-            if (isCorrect) {
-                this.classList.add("correct");
-                resultBox.textContent = "✔ Benar! Kamu Maxine Expert 😎";
-                resultBox.classList.add("success");
-            } else {
-                this.classList.add("wrong");
-                resultBox.textContent = "✖ Belum tepat, coba lagi!";
-                resultBox.classList.add("error");
-            }
+    function renderQuestion() {
+        // Hapus opsi sebelumnya
+        optionsContainer.innerHTML = "";
+        
+        const qData = questions[currentQuestionIndex];
+        questionText.textContent = qData.question;
+        
+        const letters = ["A", "B", "C"];
+
+        qData.options.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            
+            const spanLetter = document.createElement("span");
+            spanLetter.className = "opt-letter";
+            spanLetter.textContent = letters[index];
+            
+            const spanText = document.createElement("span");
+            spanText.className = "opt-text";
+            spanText.textContent = opt.text;
+            
+            btn.appendChild(spanLetter);
+            btn.appendChild(spanText);
+            
+            btn.addEventListener("click", () => handleAnswer(opt.isCorrect, btn));
+            optionsContainer.appendChild(btn);
         });
-    });
+    }
+
+    function handleAnswer(isCorrect, clickedBtn) {
+        // Nonaktifkan semua tombol agar tidak bisa di klik ganda
+        const allBtns = optionsContainer.querySelectorAll(".option-btn");
+        allBtns.forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            clickedBtn.classList.add("correct");
+            score++;
+        } else {
+            clickedBtn.classList.add("incorrect");
+        }
+
+        // Jeda 1 detik sebelum lanjut
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }, 1000);
+    }
+
+    function showResult() {
+        quizArea.classList.add("hidden");
+        resultArea.classList.remove("hidden");
+
+        resultScore.textContent = `${score}/6`;
+
+        if (score === 6) {
+            resultMessage.textContent = "6/6 Wah kamu fans sejati Maxine! 😎";
+        } else if (score >= 4) {
+            resultMessage.textContent = `${score}/6 Keren! Pengetahuanmu tentang Maxine sudah mantap! ✨`;
+        } else if (score >= 1) {
+            resultMessage.textContent = `${score}/6 Lumayan, tapi yuk kenal Maxine lebih jauh lagi! 😉`;
+        } else {
+            resultMessage.textContent = "0/6 Belum tepat, coba lagi ya! 🥺";
+        }
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        resultArea.classList.add("hidden");
+        quizArea.classList.remove("hidden");
+        renderQuestion();
+    }
+
+    restartBtn.addEventListener("click", restartQuiz);
+
+    // Inisialisasi awal
+    renderQuestion();
 </script>

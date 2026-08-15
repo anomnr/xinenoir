@@ -8,9 +8,6 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>XineNoir - Maxine Faye Archive</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 	<body>
         <div class="noise-overlay" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E&quot;);"></div>
@@ -19,6 +16,30 @@
 </html>
 
 <style is:global>
+    @font-face {
+        font-family: 'Cabinet Grotesk';
+        src: url('/font/CabinetGrotesk_Complete/Fonts/WEB/fonts/CabinetGrotesk-Variable.woff2') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: 'Archivo';
+        src: url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-Variable.woff2') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: 'Archivo';
+        src: url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-VariableItalic.woff2') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        font-style: italic;
+    }
+
     :root {
         /* Colors */
         --clr-deep-navy: #0f172a;
@@ -29,6 +50,10 @@
         
         /* Shape Lock */
         --radius-global: 12px;
+        
+        /* Fonts */
+        --font-display: 'Cabinet Grotesk', sans-serif;
+        --font-body: 'Archivo', sans-serif;
     }
 
     /* Base Resets */
@@ -51,7 +76,7 @@
         background-size: 100% 100%, 40px 40px, 40px 40px;
         background-attachment: fixed;
         color: var(--clr-white);
-        font-family: "Poppins", sans-serif;
+        font-family: var(--font-body);
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -72,6 +97,7 @@
 
     /* Global Typography Resets */
     h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
         line-height: 1.1;
     }
     

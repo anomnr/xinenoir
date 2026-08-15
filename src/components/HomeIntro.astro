@@ -13,7 +13,11 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     <div class="hero-content">
         <p class="pre-title">Fanpage of Maxine Faye Lee</p>
         <h1 class="title">XINENOIR</h1>
-        <p class="subtitle">Echoes in the dark. Where silence speaks and visual tells the unspoken truths. A cinematic journey through the lens of those who believe.</p>
+        <p class="subtitle">
+            Echoes in the dark. Where silence speaks and visual tells the
+            unspoken truths. A cinematic journey through the lens of those who
+            believe.
+        </p>
         <div class="hashtag-wrapper">
             <span class="hashtag">#Trustinfaye</span>
         </div>
@@ -91,7 +95,7 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
     }
 
     .pre-title {
-        font-family: 'Times New Roman', Times, serif;
+        font-family: "Times New Roman", Times, serif;
         font-style: italic;
         font-size: clamp(1rem, 2vw, 1.5rem);
         color: var(--clr-blue-light);
@@ -131,7 +135,7 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
 
     .hashtag {
         font-size: 0.9rem;
-        font-family: 'Poppins', sans-serif;
+        font-family: var(--font-body);
         font-weight: 500;
         color: var(--clr-white);
         letter-spacing: 0.1em;
@@ -182,7 +186,7 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
         opacity: 0;
         animation: cinematicFadeIn 2s ease-out 2.5s forwards;
     }
-    
+
     .biodata-item {
         display: flex;
         justify-content: space-between;
@@ -192,23 +196,23 @@ import maxineProfileVideo from "../assets/videos/JKT48_14th_Generation Profile_ 
         font-size: 0.85rem;
         gap: 1.5rem; /* Memberikan spasi yang jelas antara label dan nilai */
     }
-    
+
     .biodata-label {
-        color: #60A5FA; /* Biru terang */
+        color: #60a5fa; /* Biru terang */
         font-weight: 600;
         letter-spacing: 1px;
     }
-    
+
     .biodata-val {
         color: var(--clr-white);
         text-align: right;
     }
-    
+
     .biodata-catchphrase {
         margin-top: 1.2rem;
         padding-top: 1.2rem;
         border-top: 1px dashed rgba(255, 255, 255, 0.2);
-        font-family: "Poppins", sans-serif;
+        font-family: var(--font-body);
         font-style: italic;
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.9);
