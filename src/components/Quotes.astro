@@ -14,10 +14,6 @@
 
                 <div class="card-back" id="cardBack">
                     <video id="maxineVid" width="100%" height="100%" controls>
-                        <source
-                            src="https://www.w3schools.com/html/mov_bbb.mp4"
-                            type="video/mp4"
-                        />
                         Your browser does not support HTML video.
                     </video>
                     <button class="close-vid-btn" id="closeVid">Tutup Video</button>
@@ -160,12 +156,26 @@
     const closeVidBtn = document.getElementById("closeVid");
     const maxineVid = document.getElementById("maxineVid") as HTMLVideoElement;
 
+    const videoUrls = [
+        "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896048/quote_1.mp4",
+        "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896044/quote_2.mp4",
+        "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896062/quote_3.mp4",
+        "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896055/quote_4.mp4",
+        "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896040/quote_5.mp4"
+    ];
+
     // Flip card to back
     quoteCard.addEventListener("click", function(e) {
         // Prevent flipping if we click the close button
         if(e.target === closeVidBtn) return;
         
         if (!this.classList.contains('flipped')) {
+            if (maxineVid) {
+                const randomVid = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+                maxineVid.src = randomVid;
+                maxineVid.load();
+            }
+
             this.classList.add("flipped");
             if (maxineVid) {
                 setTimeout(() => { 

@@ -1,6 +1,9 @@
 ---
 // src/components/MiniGame.astro
 // Tahap 3: Interaktif Mini Game (QnA)
+
+const imagesGlob = import.meta.glob('../assets/images/*.{jpg,jpeg,png}', { eager: true });
+const images = Object.values(imagesGlob).map((img: any) => img.default.src);
 ---
 
 <section class="minigame-section" id="game">
@@ -12,8 +15,8 @@
     <div class="game-board">
         <div id="quiz-area">
             <div class="question-area">
-                <div class="silhouette-box">
-                    <span class="question-mark">?</span>
+                <div class="silhouette-box" id="silhouette-box">
+                    <span class="question-mark" id="question-mark">?</span>
                 </div>
                 <p class="question-text" id="question-text">
                     Loading question...
@@ -92,7 +95,7 @@
     .silhouette-box {
         width: 180px;
         height: 180px;
-        background: rgba(0, 0, 0, 0.5);
+        background-color: rgba(15, 23, 42, 0.5);
         margin: 0 auto 2rem;
         border-radius: var(--radius-global);
         display: flex;
@@ -100,6 +103,10 @@
         justify-content: center;
         border: 2px dashed rgba(255, 255, 255, 0.2);
         box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: overlay;
+        transition: background-image 0.5s ease;
     }
 
     .question-mark {
@@ -262,7 +269,7 @@
     }
 </style>
 
-<script>
+<script define:vars={{ imageList: images }}>
     const questions = [
         {
             question: "Di Tanggal berapa Maxine berulang tahun?",
@@ -324,10 +331,18 @@
     const resultScore = document.getElementById("result-score");
     const resultMessage = document.getElementById("result-message");
     const restartBtn = document.getElementById("restart-btn");
+    const silhouetteBox = document.getElementById("silhouette-box");
+    const questionMark = document.getElementById("question-mark");
 
     function renderQuestion() {
         // Hapus opsi sebelumnya
         optionsContainer.innerHTML = "";
+        
+        if (imageList && imageList.length > 0) {
+            const randomImg = imageList[Math.floor(Math.random() * imageList.length)];
+            silhouetteBox.style.backgroundImage = `url('${randomImg}')`;
+            questionMark.style.display = "none";
+        }
         
         const qData = questions[currentQuestionIndex];
         questionText.textContent = qData.question;

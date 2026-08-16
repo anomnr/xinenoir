@@ -1,6 +1,10 @@
 ---
 // src/components/Gallery.astro
-// Tahap 2: Gallery List dengan Cinematic Hover Image & Modal
+import { Image } from 'astro:assets';
+
+// Load all images from the assets/images directory
+const imagesGlob = import.meta.glob('../assets/images/*.{jpg,jpeg,png}', { eager: true });
+const images = Object.values(imagesGlob).map((img: any) => img.default);
 ---
 
 <section class="gallery-section" id="gallery">
@@ -9,36 +13,15 @@
         <p class="subtitle">echoes mapped in light.</p>
     </div>
 
-    <div class="bento-grid">
-        <!-- Main Highlight -->
-        <a href="#" class="bento-card highlight">
-            <div class="bento-img"></div>
-            <div class="bento-content">
-                <span class="bento-badge">[01]</span>
-                <h3 class="bento-title">JKT48 & Related Archive</h3>
-                <p class="bento-desc">August 2026</p>
-            </div>
-        </a>
-
-        <!-- Secondary Item -->
-        <a href="#" class="bento-card alt-1">
-            <div class="bento-img"></div>
-            <div class="bento-content">
-                <span class="bento-badge">[02]</span>
-                <h3 class="bento-title">Fancam Maxine</h3>
-                <p class="bento-desc">July 2026</p>
-            </div>
-        </a>
-
-        <!-- Tertiary Item -->
-        <a href="#" class="bento-card alt-2">
-            <div class="bento-img"></div>
-            <div class="bento-content">
-                <span class="bento-badge">[03]</span>
-                <h3 class="bento-title">Special Performance</h3>
-                <p class="bento-desc">June 2026</p>
-            </div>
-        </a>
+    <div class="masonry-grid">
+        {images.map((img, index) => (
+            <a href="#" class="gallery-card" data-full={img.src}>
+                <Image src={img} alt={`Maxine Archive ${index + 1}`} class="gallery-img" />
+                <div class="card-overlay">
+                    <span class="view-text">VIEW FULL</span>
+                </div>
+            </a>
+        ))}
     </div>
 
     <!-- Cinematic Lightbox Modal -->
@@ -77,105 +60,80 @@
         margin-top: 0.5rem;
     }
 
-    .bento-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: 300px;
-        gap: 1.5rem;
+    .masonry-grid {
+        column-count: 3;
+        column-gap: 1.5rem;
     }
 
-    .bento-card {
+    .gallery-card {
+        display: block;
         position: relative;
         border-radius: var(--radius-global);
         overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        text-decoration: none;
-        color: var(--clr-white);
+        margin-bottom: 1.5rem;
+        break-inside: avoid;
         border: 1px solid rgba(255, 255, 255, 0.1);
-        group: card;
+        text-decoration: none;
+        background-color: rgba(15,23,42,0.5); /* fallback */
     }
 
-    .highlight {
-        grid-column: span 2;
-        grid-row: span 2;
-    }
-
-    .alt-1 {
-        grid-column: span 1;
-        grid-row: span 1;
-    }
-
-    .alt-2 {
-        grid-column: span 1;
-        grid-row: span 1;
-    }
-
-    .bento-img {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-position: center;
-        background-size: cover;
-        z-index: 0;
-        transition: transform 0.8s ease, filter 0.8s ease;
+    .gallery-img {
+        width: 100%;
+        display: block;
+        height: auto;
         filter: grayscale(100%) contrast(110%) brightness(0.6);
+        transition: transform 0.8s ease, filter 0.8s ease;
     }
 
-    .highlight .bento-img { background-image: url("https://images.unsplash.com/photo-1516280440502-613ecfbb6f27?q=80&w=1200&auto=format&fit=crop"); }
-    .alt-1 .bento-img { background-image: url("https://images.unsplash.com/photo-1598387993441-a3637e10669d?q=80&w=800&auto=format&fit=crop"); }
-    .alt-2 .bento-img { background-image: url("https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800&auto=format&fit=crop"); }
-
-    .bento-card:hover .bento-img {
+    .gallery-card:hover .gallery-img {
         transform: scale(1.05);
-        filter: grayscale(0%) contrast(100%) brightness(0.8);
+        filter: grayscale(0%) contrast(100%) brightness(0.9);
     }
 
-    .bento-content {
-        position: relative;
+    .card-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
         z-index: 1;
-        padding: 2rem;
-        background: linear-gradient(to top, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0) 100%);
-        transition: transform 0.4s ease;
     }
 
-    .bento-badge {
+    .gallery-card:hover .card-overlay {
+        opacity: 1;
+    }
+
+    .view-text {
         font-family: "Courier New", monospace;
         font-size: 0.9rem;
-        color: var(--clr-blue-light);
-        display: inline-block;
-        margin-bottom: 0.5rem;
+        letter-spacing: 2px;
+        color: var(--clr-white);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        backdrop-filter: blur(4px);
+        transform: translateY(10px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .bento-title {
-        font-size: clamp(1.2rem, 3vw, 2rem);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.5rem;
+    .gallery-card:hover .view-text {
+        transform: translateY(0);
+        border-color: var(--clr-white);
+        background: rgba(255, 255, 255, 0.1);
     }
 
-    .bento-desc {
-        font-family: "Courier New", monospace;
-        color: var(--clr-silver);
-        font-size: 0.9rem;
+    @media (max-width: 1024px) {
+        .masonry-grid {
+            column-count: 2;
+        }
     }
 
-    @media (max-width: 900px) {
-        .bento-grid {
-            grid-template-columns: 1fr;
-            grid-auto-rows: auto;
-        }
-        .highlight, .alt-1, .alt-2 {
-            grid-column: 1;
-            grid-row: auto;
-        }
-        .highlight {
-            min-height: 400px;
-        }
-        .alt-1, .alt-2 {
-            min-height: 250px;
+    @media (max-width: 640px) {
+        .masonry-grid {
+            column-count: 1;
         }
     }
 
@@ -183,7 +141,7 @@
     .gallery-modal {
         position: fixed;
         top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(15, 23, 42, 0.85);
+        background: rgba(15, 23, 42, 0.95);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         z-index: 9999;
@@ -220,6 +178,7 @@
         box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         transform: scale(0.95);
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        object-fit: contain;
     }
 
     .gallery-modal.modal-active img {
@@ -229,7 +188,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const cards = document.querySelectorAll('.bento-card');
+        const cards = document.querySelectorAll('.gallery-card');
         const modal = document.getElementById('gallery-modal');
         const modalImg = document.getElementById('lightbox-img');
         const closeBtn = document.querySelector('.modal-close');
@@ -239,15 +198,9 @@
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
                 e.preventDefault();
-                const bgImg = card.querySelector('.bento-img') as HTMLElement;
-                if (!bgImg) return;
-                
-                const style = window.getComputedStyle(bgImg);
-                let url = style.backgroundImage;
-                // Extract URL from url("...")
-                if (url && url !== 'none') {
-                    url = url.slice(4, -1).replace(/"/g, "");
-                    (modalImg as HTMLImageElement).src = url;
+                const fullSrc = card.getAttribute('data-full');
+                if (fullSrc) {
+                    (modalImg as HTMLImageElement).src = fullSrc;
                     modal.classList.add('modal-active');
                 }
             });
