@@ -19,29 +19,48 @@
         </p>
         <div class="hashtag-wrapper">
             <span class="hashtag">#Trustinfaye</span>
+            <span class="hashtag">#MAXINEKEREN</span>
         </div>
-    </div>
 
-    <aside class="biodata-card">
-        <div class="biodata-item">
-            <span class="biodata-label">NAME</span>
-            <span class="biodata-val">Maxine Faye Lee (Maxine)</span>
-        </div>
-        <div class="biodata-item">
-            <span class="biodata-label">GEN</span>
-            <span class="biodata-val">14th Generation JKT48</span>
-        </div>
-        <div class="biodata-item">
-            <span class="biodata-label">DOB</span>
-            <span class="biodata-val">December 2, 2011</span>
-        </div>
-        <div class="biodata-catchphrase">
-            "Faith, trust, and magical pixie dust. Hai, aku Maxine!"
-        </div>
-    </aside>
+        <aside class="biodata-card">
+            <div class="biodata-item">
+                <span class="biodata-label">NAME</span>
+                <span class="biodata-val">Maxine Faye Lee (Maxine)</span>
+            </div>
+            <div class="biodata-item">
+                <span class="biodata-label">GEN</span>
+                <span class="biodata-val">14th Generation JKT48</span>
+            </div>
+            <div class="biodata-item">
+                <span class="biodata-label">DOB</span>
+                <span class="biodata-val">December 2, 2011</span>
+            </div>
+            <div class="biodata-catchphrase">
+                "Faith, trust, and magical pixie dust. Hai, aku Maxine!"
+            </div>
+        </aside>
+    </div>
 </section>
 
 <style>
+    @font-face {
+        font-family: 'Cabinet Grotesk';
+        src: url('/font/CabinetGrotesk_Complete/Fonts/WEB/fonts/CabinetGrotesk-Extrabold.woff2') format('woff2'),
+             url('/font/CabinetGrotesk_Complete/Fonts/WEB/fonts/CabinetGrotesk-Extrabold.woff') format('woff');
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Archivo';
+        src: url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-SemiBold.woff2') format('woff2'),
+             url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-SemiBold.woff') format('woff');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+    }
+
     .hero-section {
         position: relative;
         width: 100%;
@@ -94,20 +113,22 @@
     }
 
     .pre-title {
-        font-family: "Times New Roman", Times, serif;
-        font-style: italic;
+        font-family: 'Archivo', sans-serif;
+        font-style: normal;
+        font-weight: 600;
         font-size: clamp(1rem, 2vw, 1.5rem);
         color: var(--clr-blue-light);
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         opacity: 0;
         animation: cinematicFadeIn 2.5s ease-out 0.2s forwards;
         margin-bottom: -1rem;
     }
 
     .title {
+        font-family: 'Cabinet Grotesk', sans-serif;
         font-size: clamp(3.5rem, 8vw, 7rem);
-        font-weight: 700;
-        letter-spacing: 0.1em;
+        font-weight: 800;
+        letter-spacing: -0.05em;
         text-transform: uppercase;
         margin: 0;
         text-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
@@ -129,6 +150,8 @@
     .hashtag-wrapper {
         margin-top: 1.5rem;
         opacity: 0;
+        display: flex;
+        gap: 1rem;
         animation: cinematicFadeIn 2s ease-out 2.2s forwards;
     }
 
@@ -170,16 +193,15 @@
 
     /* Area Biodata Glassmorphism */
     .biodata-card {
-        position: absolute;
-        bottom: 40px;
-        right: 40px;
+        margin-top: 2rem;
         background: rgba(15, 23, 42, 0.4);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 1.5rem;
-        border-radius: 12px; /* var(--radius-global) fallback */
-        max-width: 350px;
+        border-radius: var(--radius-global, 12px);
+        width: 100%;
+        max-width: 450px;
         z-index: 10;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         opacity: 0;
@@ -220,10 +242,7 @@
 
     @media (max-width: 900px) {
         .biodata-card {
-            position: relative;
-            bottom: auto;
-            right: auto;
-            margin-top: 3rem;
+            margin-top: 2rem;
             width: 100%;
             max-width: 100%;
         }
@@ -264,3 +283,17 @@
         }
     }
 </style>
+
+<script>
+    const backgroundVideo = document.querySelector('.background-video') as HTMLVideoElement;
+    
+    if (backgroundVideo) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY === 0) {
+                backgroundVideo.muted = false;
+            } else if (window.scrollY > 100) {
+                backgroundVideo.muted = true;
+            }
+        });
+    }
+</script>

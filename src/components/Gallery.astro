@@ -4,7 +4,20 @@ import { Image } from 'astro:assets';
 
 // Load all images from the assets/images directory
 const imagesGlob = import.meta.glob('../assets/images/*.{jpg,jpeg,png}', { eager: true });
-const images = Object.values(imagesGlob).map((img: any) => img.default);
+const allImages = Object.values(imagesGlob).map((img: any) => img.default);
+
+// Group images into folders based on filename matches
+const instagramImages = allImages.filter((img: any) => img.src.toLowerCase().includes('instagram'));
+const papImages = allImages.filter((img: any) => img.src.toLowerCase().includes('pap'));
+const liveImages = allImages.filter((img: any) => img.src.toLowerCase().includes('live'));
+const showImages = allImages.filter((img: any) => img.src.toLowerCase().includes('show'));
+
+const folders = [
+    { id: 'instagram', title: 'INSTAGRAM', images: instagramImages },
+    { id: 'pap', title: 'PAP', images: papImages },
+    { id: 'live', title: 'LIVE', images: liveImages },
+    { id: 'show', title: 'SHOW', images: showImages },
+].filter(folder => folder.images.length > 0);
 ---
 
 <section class="gallery-section" id="gallery">
@@ -13,21 +26,67 @@ const images = Object.values(imagesGlob).map((img: any) => img.default);
         <p class="subtitle">echoes mapped in light.</p>
     </div>
 
-    <div class="masonry-grid">
-        {images.map((img, index) => (
-            <a href="#" class="gallery-card" data-full={img.src}>
-                <Image src={img} alt={`Maxine Archive ${index + 1}`} class="gallery-img" />
-                <div class="card-overlay">
-                    <span class="view-text">VIEW FULL</span>
-                </div>
-            </a>
-        ))}
+    <!-- NoArt Layout -->
+    <div class="noart-layout">
+        <!-- LEFT: Folder Titles -->
+        <div class="noart-left">
+            <h4 class="col-header">■ ARCHIVES</h4>
+            <ul class="nav-list" id="left-nav">
+                {folders.map((folder, i) => (
+                    <li class="nav-item" data-id={folder.id}>
+                        <span class="nav-num">[{i + 1}]</span> 
+                        <span class="nav-title">{folder.title}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+
+        <!-- CENTER: Scrolling Images -->
+        <div class="noart-center">
+            <div class="noart-scroll-container" id="folder-scroll-container">
+                <!-- Infinite Scroll sets (3 sets) -->
+                {[0, 1, 2].map((setIndex) => (
+                    <div class="scroll-set" data-set={setIndex}>
+                        {folders.map((folder) => (
+                            <div class="center-img-wrapper folder-card-trigger" data-folder-id={folder.id}>
+                                {folder.images[0] && <Image src={folder.images[0]} alt={`${folder.title} Cover`} class="center-img" />}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- RIGHT: Dates -->
+        <div class="noart-right">
+            <h4 class="col-header">■ DATE</h4>
+            <ul class="nav-list right-align" id="right-nav">
+                {folders.map((folder) => (
+                    <li class="nav-item" data-id={folder.id}>
+                        <span class="nav-date">LOREM IPSUM 12, 2026</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
     </div>
 
-    <!-- Cinematic Lightbox Modal -->
+    <!-- Cinematic Lightbox Modal (Slider) -->
     <div id="gallery-modal" class="gallery-modal">
         <span class="modal-close">&times; CLOSE</span>
-        <img id="lightbox-img" src="" alt="Gallery Image Enlarge">
+        
+        {folders.map(folder => (
+            <div class="slider-container" id={`slider-${folder.id}`} style="display: none;">
+                {folder.images.map((img, index) => (
+                    <Image src={img} alt={`${folder.title} Image ${index + 1}`} class="slider-img" />
+                ))}
+            </div>
+        ))}
+        
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="nav-btn" id="btn-prev">← PREV</button>
+            <button class="nav-btn" id="btn-next">NEXT →</button>
+        </div>
     </div>
 </section>
 
@@ -41,8 +100,8 @@ const images = Object.values(imagesGlob).map((img: any) => img.default);
     }
 
     .gallery-header {
-        margin-bottom: 4rem;
-        text-align: left;
+        margin-bottom: 2rem;
+        text-align: center;
     }
 
     .title {
@@ -60,93 +119,163 @@ const images = Object.values(imagesGlob).map((img: any) => img.default);
         margin-top: 0.5rem;
     }
 
-    .masonry-grid {
-        column-count: 3;
-        column-gap: 1.5rem;
+    /* NoArt Layout */
+    .noart-layout {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 2rem;
+        height: 70vh;
+        align-items: center;
     }
 
-    .gallery-card {
-        display: block;
+    /* Responsive adjustment */
+    @media (max-width: 900px) {
+        .noart-layout {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+        .noart-left, .noart-right {
+            display: none; /* Hide sidebars on mobile, or redesign */
+        }
+    }
+
+    .noart-left, .noart-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .noart-right {
+        align-items: flex-end;
+        text-align: right;
+    }
+
+    .col-header {
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        color: var(--clr-white);
+        margin-bottom: 2rem;
+        opacity: 0.8;
+    }
+
+    .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .nav-item {
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        color: var(--clr-silver);
+        opacity: 0.4;
+        transition: all 0.4s ease;
+        cursor: pointer;
+    }
+
+    .nav-item:hover {
+        opacity: 0.8;
+        color: var(--clr-white);
+    }
+
+    .nav-item.active {
+        color: var(--clr-blue-accent);
+        opacity: 1;
+        font-weight: bold;
+    }
+
+    .nav-title {
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-left: 0.5rem;
+    }
+
+    /* CENTER SCROLL */
+    .noart-center {
         position: relative;
-        border-radius: var(--radius-global);
+        height: 70vh;
         overflow: hidden;
-        margin-bottom: 1.5rem;
-        break-inside: avoid;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        text-decoration: none;
-        background-color: rgba(15,23,42,0.5); /* fallback */
     }
 
-    .gallery-img {
-        width: 100%;
-        display: block;
-        height: auto;
-        filter: grayscale(100%) contrast(110%) brightness(0.6);
-        transition: transform 0.8s ease, filter 0.8s ease;
+    .noart-scroll-container {
+        height: 100%;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scrollbar-width: none; /* Firefox */
+        scroll-behavior: auto; /* Instant jumping */
+        padding: 15vh 0; /* Ensures 40vh item centers in 70vh container */
+    }
+    
+    .noart-scroll-container::-webkit-scrollbar {
+        display: none;
     }
 
-    .gallery-card:hover .gallery-img {
-        transform: scale(1.05);
-        filter: grayscale(0%) contrast(100%) brightness(0.9);
+    .scroll-set {
+        display: flex;
+        flex-direction: column;
     }
 
-    .card-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.3);
+    .center-img-wrapper {
+        height: 40vh; /* Exactly 40vh so math is predictable */
+        scroll-snap-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        z-index: 1;
+        cursor: pointer;
+        perspective: 1000px;
     }
 
-    .gallery-card:hover .card-overlay {
+    .center-img {
+        height: 90%;
+        width: 100%;
+        max-width: 400px;
+        object-fit: cover;
+        border-radius: var(--radius-global, 12px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease, opacity 0.6s ease;
+        
+        /* Inactive states */
+        transform: scale(0.85) rotateX(5deg);
+        filter: grayscale(100%) brightness(0.4);
+        opacity: 0.5;
+    }
+
+    .center-img-wrapper.active-image .center-img {
+        transform: scale(1.05) rotateX(0deg);
+        filter: grayscale(0%) brightness(1);
         opacity: 1;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.9);
     }
 
-    .view-text {
-        font-family: "Courier New", monospace;
-        font-size: 0.9rem;
-        letter-spacing: 2px;
-        color: var(--clr-white);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        padding: 0.6rem 1.2rem;
-        border-radius: 4px;
-        backdrop-filter: blur(4px);
-        transform: translateY(10px);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Helper class to prevent transition glitches during infinite loop jumps */
+    .no-transition .center-img {
+        transition: none !important;
     }
 
-    .gallery-card:hover .view-text {
-        transform: translateY(0);
-        border-color: var(--clr-white);
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    @media (max-width: 1024px) {
-        .masonry-grid {
-            column-count: 2;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .masonry-grid {
-            column-count: 1;
-        }
-    }
-
-    /* Cinematic Modal Styles */
+    /* Cinematic Modal & Slider */
     .gallery-modal {
         position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(15, 23, 42, 0.95);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        top: 0; 
+        left: 0; 
+        width: 100vw; 
+        height: 100vh;
+        background: rgba(10, 15, 30, 0.98); /* Solid dark, no glassmorphism */
         z-index: 9999;
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center;
+        opacity: 0; 
+        pointer-events: none; 
+        transition: opacity 0.5s ease;
     }
 
     .gallery-modal.modal-active {
@@ -165,60 +294,311 @@ const images = Object.values(imagesGlob).map((img: any) => img.default);
         cursor: pointer;
         z-index: 10000;
         transition: color 0.3s ease;
+        padding: 10px;
     }
 
     .modal-close:hover {
         color: var(--clr-blue-accent);
     }
-    
-    .gallery-modal img {
-        max-width: 90%;
-        max-height: 90vh;
-        border-radius: var(--radius-global);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        transform: scale(0.95);
-        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        object-fit: contain;
+
+    /* Slider Container inside Modal */
+    .slider-container {
+        position: relative;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        width: 100vw;
+        padding: 5vh 50vw;
+        align-items: center;
+        scrollbar-width: none;
     }
 
-    .gallery-modal.modal-active img {
-        transform: scale(1);
+    .slider-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .slider-img {
+        scroll-snap-align: center;
+        flex: 0 0 auto;
+        height: 65vh;
+        width: auto;
+        max-width: 85vw;
+        object-fit: cover;
+        border-radius: var(--radius-global, 12px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease, opacity 0.6s ease;
+        
+        transform: scale(0.8) translateY(20px);
+        filter: grayscale(100%) brightness(0.4);
+        opacity: 0.5;
+        z-index: 1;
+    }
+
+    .slider-img.active-slide {
+        transform: scale(1.05) translateY(0);
+        filter: grayscale(0%) brightness(1);
+        opacity: 1;
+        z-index: 10;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    }
+
+    .slider-nav {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        z-index: 10001;
+    }
+
+    .nav-btn {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: var(--clr-white);
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        padding: 0.6rem 1.5rem;
+        border-radius: var(--radius-global, 12px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+        background: var(--clr-white);
+        color: var(--clr-deep-navy);
+        border-color: var(--clr-white);
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const cards = document.querySelectorAll('.gallery-card');
+        // --- 1. NoArt Infinite Vertical Scroll & Sync ---
+        const scrollContainer = document.getElementById('folder-scroll-container');
+        const sets = document.querySelectorAll('.scroll-set');
+        const wrappers = document.querySelectorAll('.center-img-wrapper');
+        const leftItems = document.querySelectorAll('#left-nav .nav-item');
+        const rightItems = document.querySelectorAll('#right-nav .nav-item');
+
+        if (scrollContainer && sets.length === 3) {
+            const setHeight = sets[0].offsetHeight;
+            let isJumping = false;
+            
+            // Sync sidebars with active center image
+            const updateActiveState = () => {
+                const containerCenter = scrollContainer.getBoundingClientRect().top + scrollContainer.offsetHeight / 2;
+                let closestWrapper = null;
+                let closestDistance = Infinity;
+
+                wrappers.forEach(wrapper => {
+                    const center = wrapper.getBoundingClientRect().top + wrapper.offsetHeight / 2;
+                    const distance = Math.abs(containerCenter - center);
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestWrapper = wrapper;
+                    }
+                });
+
+                if (closestWrapper) {
+                    wrappers.forEach(w => w.classList.remove('active-image'));
+                    closestWrapper.classList.add('active-image');
+
+                    const activeId = closestWrapper.getAttribute('data-folder-id');
+                    leftItems.forEach(item => item.classList.toggle('active', item.getAttribute('data-id') === activeId));
+                    rightItems.forEach(item => item.classList.toggle('active', item.getAttribute('data-id') === activeId));
+                }
+            };
+
+            // Infinite loop jump logic (waits for scroll to stop to avoid snap glitches)
+            let scrollTimeout;
+            const handleScroll = () => {
+                updateActiveState();
+
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const scrollTop = scrollContainer.scrollTop;
+
+                    if (scrollTop < setHeight * 0.9 || scrollTop > setHeight * 1.9) {
+                        // Disable transitions to prevent "pressed" animation glitch
+                        scrollContainer.classList.add('no-transition');
+                        scrollContainer.style.scrollSnapType = 'none';
+                        
+                        // Perform the invisible jump
+                        if (scrollTop < setHeight * 0.9) {
+                            scrollContainer.scrollTop = scrollTop + setHeight;
+                        } else {
+                            scrollContainer.scrollTop = scrollTop - setHeight;
+                        }
+                        
+                        updateActiveState(); // Instantly update active class on the new element
+                        
+                        // Force browser reflow to apply instant changes before restoring transitions
+                        scrollContainer.offsetHeight; 
+                        
+                        // Restore normal behavior
+                        scrollContainer.classList.remove('no-transition');
+                        scrollContainer.style.scrollSnapType = 'y mandatory';
+                    }
+                }, 150); // Execute jump 150ms after scroll has completely stopped
+            };
+
+            scrollContainer.addEventListener('scroll', handleScroll);
+
+            // Initial center
+            setTimeout(() => {
+                scrollContainer.scrollTop = setHeight; 
+                updateActiveState();
+            }, 100);
+
+            // Make left and right sidebar items clickable
+            const allNavItems = document.querySelectorAll('.nav-item');
+            allNavItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-id');
+                    // Find the wrapper in the middle set (index 1)
+                    if (sets.length > 1) {
+                        const targetWrapper = sets[1].querySelector(`.center-img-wrapper[data-folder-id="${targetId}"]`);
+                        if (targetWrapper) {
+                            // Find the index of the folder to calculate exact scroll position
+                            const foldersArray = Array.from(sets[1].children);
+                            const folderIndex = foldersArray.indexOf(targetWrapper);
+                            
+                            // Each wrapper is exactly wrapper.offsetHeight tall.
+                            // The middle set starts exactly at setHeight.
+                            const targetScrollTop = setHeight + (folderIndex * targetWrapper.offsetHeight);
+                            
+                            scrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- 2. Cinematic Modal Logic ---
+        const folderCardTriggers = document.querySelectorAll('.folder-card-trigger');
         const modal = document.getElementById('gallery-modal');
-        const modalImg = document.getElementById('lightbox-img');
         const closeBtn = document.querySelector('.modal-close');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const sliderContainers = document.querySelectorAll('.slider-container');
+        
+        let activeSliderContainer = null;
 
-        if (!modal || !modalImg || !closeBtn) return;
+        if (!modal || !closeBtn) return;
 
-        cards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                const fullSrc = card.getAttribute('data-full');
-                if (fullSrc) {
-                    (modalImg as HTMLImageElement).src = fullSrc;
+        folderCardTriggers.forEach(card => {
+            card.addEventListener('click', () => {
+                const folderId = card.getAttribute('data-folder-id');
+                activeSliderContainer = document.getElementById(`slider-${folderId}`);
+                
+                sliderContainers.forEach(container => {
+                    container.style.display = 'none';
+                    container.removeEventListener('scroll', updateActiveSlideModal);
+                });
+                
+                if (activeSliderContainer) {
+                    activeSliderContainer.style.display = 'flex';
+                    activeSliderContainer.addEventListener('scroll', updateActiveSlideModal);
+                    
                     modal.classList.add('modal-active');
+                    
+                    setTimeout(() => {
+                        const slides = activeSliderContainer.querySelectorAll('.slider-img');
+                        if (slides.length > 0) {
+                            const targetSlide = slides[0];
+                            const containerWidth = activeSliderContainer.offsetWidth;
+                            const slideCenterOffset = targetSlide.offsetLeft + (targetSlide.offsetWidth / 2);
+                            activeSliderContainer.scrollLeft = slideCenterOffset - (containerWidth / 2);
+                            updateActiveSlideModal(); 
+                        }
+                    }, 10);
                 }
             });
         });
 
         closeBtn.addEventListener('click', () => {
             modal.classList.remove('modal-active');
+            if (activeSliderContainer) {
+                activeSliderContainer.removeEventListener('scroll', updateActiveSlideModal);
+                setTimeout(() => {
+                    activeSliderContainer.style.display = 'none';
+                }, 500);
+            }
         });
+
+        const updateActiveSlideModal = () => {
+            if (!activeSliderContainer) return;
+            const containerCenter = activeSliderContainer.getBoundingClientRect().left + activeSliderContainer.offsetWidth / 2;
+            let closestSlide = null;
+            let closestDistance = Infinity;
+
+            const slides = activeSliderContainer.querySelectorAll('.slider-img');
+            slides.forEach(slide => {
+                const slideCenter = slide.getBoundingClientRect().left + slide.offsetWidth / 2;
+                const distance = Math.abs(containerCenter - slideCenter);
+                
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestSlide = slide;
+                }
+            });
+
+            slides.forEach(slide => {
+                if (slide === closestSlide) {
+                    slide.classList.add('active-slide');
+                } else {
+                    slide.classList.remove('active-slide');
+                }
+            });
+        };
+
+        const scrollToSlide = (targetIndex) => {
+            if (!activeSliderContainer) return;
+            const slides = Array.from(activeSliderContainer.querySelectorAll('.slider-img'));
+            if (targetIndex < 0) targetIndex = 0;
+            if (targetIndex >= slides.length) targetIndex = slides.length - 1;
+            
+            const targetSlide = slides[targetIndex];
+            if (targetSlide) {
+                const containerWidth = activeSliderContainer.offsetWidth;
+                const slideCenterOffset = targetSlide.offsetLeft + (targetSlide.offsetWidth / 2);
+                const targetScrollLeft = slideCenterOffset - (containerWidth / 2);
+                
+                activeSliderContainer.scrollTo({
+                    left: targetScrollLeft,
+                    behavior: 'smooth'
+                });
+            }
+        };
+
+        const scrollByDirection = (direction) => {
+            if (!activeSliderContainer) return;
+            const slides = Array.from(activeSliderContainer.querySelectorAll('.slider-img'));
+            let activeIndex = slides.findIndex(s => s.classList.contains('active-slide'));
+            if (activeIndex === -1) activeIndex = 0;
+            scrollToSlide(activeIndex + direction);
+        };
+
+        if (btnPrev && btnNext) {
+            btnPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                scrollByDirection(-1);
+            });
+
+            btnNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                scrollByDirection(1);
+            });
+        }
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                modal.classList.remove('modal-active');
+                closeBtn.click();
             }
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('modal-active')) {
-                modal.classList.remove('modal-active');
+                closeBtn.click();
             }
         });
     });
