@@ -38,7 +38,7 @@ const images = Object.values(imagesGlob).map((img: any) => img.default.src);
 <style>
     .minigame-section {
         padding: 8rem 2rem;
-        background-color: var(--clr-deep-navy);
+        background-color: transparent;
         color: var(--clr-white);
         max-width: 800px;
         margin: 0 auto;
@@ -65,14 +65,14 @@ const images = Object.values(imagesGlob).map((img: any) => img.default.src);
     }
 
     .game-board {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: linear-gradient(145deg, rgba(30, 58, 138, 0.15), rgba(15, 23, 42, 0.7));
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: var(--radius-global);
         padding: 4rem 2rem;
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 40px rgba(37, 99, 235, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
         position: relative;
         overflow: hidden;
     }
@@ -97,12 +97,12 @@ const images = Object.values(imagesGlob).map((img: any) => img.default.src);
         height: 180px;
         background-color: rgba(15, 23, 42, 0.5);
         margin: 0 auto 2rem;
-        border-radius: var(--radius-global);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 2px dashed rgba(255, 255, 255, 0.2);
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(96, 165, 250, 0.3);
         background-size: cover;
         background-position: center;
         background-blend-mode: overlay;
@@ -406,6 +406,12 @@ const images = Object.values(imagesGlob).map((img: any) => img.default.src);
             resultMessage.textContent = `${score}/6 Lumayan, tapi yuk kenal Maxine lebih jauh lagi! 😉`;
         } else {
             resultMessage.textContent = "0/6 Belum tepat, coba lagi ya! 🥺";
+        }
+
+        // Trigger Unlock saat mencapai result screen
+        if (!localStorage.getItem('achv_quiz')) {
+            localStorage.setItem('achv_quiz', 'true');
+            window.dispatchEvent(new Event('updateCollection'));
         }
     }
 

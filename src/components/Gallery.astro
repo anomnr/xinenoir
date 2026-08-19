@@ -485,9 +485,23 @@ const folders = [
 
         if (!modal || !closeBtn) return;
 
+        // --- 3. Achievement Tracking ---
+        const uniqueFolders = new Set(Array.from(folderCardTriggers).map(el => el.getAttribute('data-folder-id')));
+        let viewedFolders = new Set();
+
         folderCardTriggers.forEach(card => {
             card.addEventListener('click', () => {
                 const folderId = card.getAttribute('data-folder-id');
+                
+                // Track achievement
+                viewedFolders.add(folderId);
+                if (viewedFolders.size === uniqueFolders.size) {
+                    if (!localStorage.getItem('achv_gallery')) {
+                        localStorage.setItem('achv_gallery', 'true');
+                        window.dispatchEvent(new Event('updateCollection'));
+                    }
+                }
+
                 activeSliderContainer = document.getElementById(`slider-${folderId}`);
                 
                 sliderContainers.forEach(container => {

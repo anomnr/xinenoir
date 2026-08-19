@@ -3,49 +3,54 @@
 // Tahap 4: Digital Collectible System
 ---
 
-<section class="cards-section">
+<section class="cards-section" id="collection">
     <div class="header-box">
         <h2 class="title">Digital Collection</h2>
         <p class="subtitle">Collect them all! Watch live to unlock.</p>
+        <!-- Teks Progress -->
+        <div id="collection-progress" style="margin-top: 1rem; font-family: monospace; color: var(--clr-blue-light); font-size: 1.1rem; letter-spacing: 1px;">
+            Progress: 0/4 Unlocked
+        </div>
     </div>
 
     <div class="cards-container">
-        <div class="collect-card unlocked">
-            <div class="card-glare"></div>
-            <div class="card-image"></div>
-            <div class="card-info">
-                <span class="card-id">#001</span>
-                <h4 class="card-name">First Live</h4>
-                <span class="status">✨ Unlocked</span>
-            </div>
-        </div>
-
-        <div class="collect-card unlocked">
-            <div class="card-glare"></div>
-            <div class="card-image alt-img"></div>
-            <div class="card-info">
-                <span class="card-id">#002</span>
-                <h4 class="card-name">Special Moment</h4>
-                <span class="status">✨ Unlocked</span>
-            </div>
-        </div>
-
-        <div class="collect-card locked">
+        <!-- 4 Kartu Default Terkunci dengan atribut data-achv -->
+        <div class="collect-card locked" data-achv="achv_gallery">
             <div class="card-glare"></div>
             <div class="lock-icon">🔒</div>
             <div class="card-info">
-                <span class="card-id">#003</span>
-                <h4 class="card-name">Performance</h4>
+                <span class="card-id">#001</span>
+                <h4 class="card-name">Visual Explorer</h4>
                 <span class="status">???</span>
             </div>
         </div>
 
-        <div class="collect-card locked">
+        <div class="collect-card locked" data-achv="achv_music">
+            <div class="card-glare"></div>
+            <div class="lock-icon">🔒</div>
+            <div class="card-info">
+                <span class="card-id">#002</span>
+                <h4 class="card-name">Music Listener</h4>
+                <span class="status">???</span>
+            </div>
+        </div>
+
+        <div class="collect-card locked" data-achv="achv_quiz">
+            <div class="card-glare"></div>
+            <div class="lock-icon">🔒</div>
+            <div class="card-info">
+                <span class="card-id">#003</span>
+                <h4 class="card-name">Trivia Master</h4>
+                <span class="status">???</span>
+            </div>
+        </div>
+
+        <div class="collect-card locked" data-achv="achv_quote">
             <div class="card-glare"></div>
             <div class="lock-icon">🔒</div>
             <div class="card-info">
                 <span class="card-id">#004</span>
-                <h4 class="card-name">Birthday</h4>
+                <h4 class="card-name">Secret Message</h4>
                 <span class="status">???</span>
             </div>
         </div>
@@ -55,7 +60,7 @@
 <style>
     .cards-section {
         padding: 8rem 2rem;
-        background-color: var(--clr-deep-navy);
+        background-color: transparent;
         color: var(--clr-white);
     }
 
@@ -178,8 +183,10 @@
     }
     .unlocked .status {
         font-size: 0.85rem;
-        color: #10b981;
+        color: #10b981 !important;
+        font-family: var(--font-body) !important;
         font-weight: bold;
+        letter-spacing: normal !important;
         text-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
     }
 
@@ -212,3 +219,49 @@
         letter-spacing: 2px;
     }
 </style>
+
+<script>
+    function checkAchievements() {
+        const cards = document.querySelectorAll('.collect-card');
+        const progressText = document.getElementById('collection-progress');
+        let unlockedCount = 0;
+
+        cards.forEach(card => {
+            const achvKey = card.getAttribute('data-achv');
+            if (achvKey && localStorage.getItem(achvKey) === 'true') {
+                unlockedCount++;
+                
+                // Ubah tampilan UI Kartu
+                card.classList.remove('locked');
+                card.classList.add('unlocked');
+                
+                // Ubah elemen gembok menjadi kontainer gambar 
+                const lockIcon = card.querySelector('.lock-icon');
+                if (lockIcon) {
+                    lockIcon.className = 'card-image';
+                    lockIcon.innerHTML = '';
+                    
+                    // Beri gambar berbeda tiap kartu (opsional)
+                    if(achvKey === 'achv_music') lockIcon.classList.add('alt-img');
+                }
+                
+                // Update teks status menjadi unlocked
+                const statusSpan = card.querySelector('.status');
+                if (statusSpan) {
+                    statusSpan.textContent = '✨ Unlocked';
+                }
+            }
+        });
+
+        // Update teks rasio progress
+        if (progressText) {
+            progressText.textContent = `Progress: ${unlockedCount}/4 Unlocked`;
+        }
+    }
+
+    // Jalankan verifikasi ketika halaman direfresh
+    document.addEventListener('DOMContentLoaded', checkAchievements);
+    
+    // Dengarkan event kustom untuk update UI secara Real-Time tanpa refresh
+    window.addEventListener('updateCollection', checkAchievements);
+</script>

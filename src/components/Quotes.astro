@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="card-back" id="cardBack">
-                    <video id="maxineVid" width="100%" height="100%" controls>
+                    <video id="maxineVid" width="100%" height="100%" playsinline>
                         Your browser does not support HTML video.
                     </video>
                     <button class="close-vid-btn" id="closeVid">Tutup Video</button>
@@ -24,9 +24,18 @@
 </section>
 
 <style>
+    @font-face {
+        font-family: 'Archivo';
+        src: url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-SemiBold.woff2') format('woff2'),
+             url('/font/Archivo_Complete/Fonts/WEB/fonts/Archivo-SemiBold.woff') format('woff');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+    }
+
     .quotes-section {
         padding: 6rem 2rem 10rem;
-        background-color: var(--clr-deep-navy);
+        background-color: transparent;
         display: flex;
         justify-content: center;
         perspective: 1200px;
@@ -37,21 +46,31 @@
     .quotes-container {
         width: 100%;
         max-width: 600px;
+        display: flex;
+        justify-content: center;
     }
 
     .quote-card {
         width: 100%;
+        max-width: 600px;
         min-height: 350px;
+        margin: 0 auto;
         background-color: transparent;
         perspective: 1000px;
         cursor: pointer;
+        transition: max-width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                    min-height 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .quote-card.flipped {
+        max-width: 320px;
+        min-height: 620px; /* Fits 320px wide 9:16 video + 50px button */
     }
 
     .card-inner {
         position: relative;
         width: 100%;
         height: 100%;
-        min-height: 350px;
         text-align: center;
         transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         transform-style: preserve-3d;
@@ -67,23 +86,22 @@
         height: 100%;
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        border-radius: var(--radius-global);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        border-radius: var(--radius-global, 12px);
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
     }
 
     .card-front {
-        background: rgba(255, 255, 255, 0.05);
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-left: 3px solid #3B82F6;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        padding: 3rem;
+        padding: 2rem;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -93,22 +111,25 @@
     }
 
     .quote-text {
-        font-family: var(--font-body);
+        font-family: 'Archivo', sans-serif;
         font-size: clamp(1.5rem, 4vw, 2rem);
-        font-weight: 500;
-        font-style: italic;
+        font-weight: 600;
+        font-style: normal;
         color: var(--clr-white);
         margin-bottom: 2rem;
         text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        line-height: 1.4;
     }
 
     .tap-indicator {
         font-family: "Courier New", monospace;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         color: var(--clr-blue-light);
         animation: bounce 2s infinite;
         letter-spacing: 2px;
         text-transform: uppercase;
+        margin-top: auto;
+        margin-bottom: 1rem;
     }
 
     @keyframes bounce {
@@ -164,8 +185,18 @@
         "https://res.cloudinary.com/b8gmaoxd/video/upload/v1786896040/quote_5.mp4"
     ];
 
+    // --- Achievement Tracking ---
+    if (maxineVid) {
+        maxineVid.addEventListener('ended', () => {
+            if (!localStorage.getItem('achv_quote')) {
+                localStorage.setItem('achv_quote', 'true');
+                window.dispatchEvent(new Event('updateCollection'));
+            }
+        });
+    }
+
     // Flip card to back
-    quoteCard.addEventListener("click", function(e) {
+    quoteCard?.addEventListener("click", function(e) {
         // Prevent flipping if we click the close button
         if(e.target === closeVidBtn) return;
         
@@ -189,12 +220,12 @@
     });
 
     // Flip card to front
-    closeVidBtn.addEventListener("click", (e) => {
+    closeVidBtn?.addEventListener("click", (e) => {
         e.stopPropagation();
         if (maxineVid) {
             maxineVid.pause();
             maxineVid.currentTime = 0;
         }
-        quoteCard.classList.remove("flipped");
+        quoteCard?.classList.remove("flipped");
     });
 </script>

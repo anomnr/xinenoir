@@ -81,11 +81,13 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         object-fit: cover;
         z-index: -2;
         filter: grayscale(100%) contrast(110%) brightness(0.5);
         background-color: var(--clr-deep-navy);
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     }
 
     .video-overlay {
@@ -101,6 +103,8 @@
             rgba(15, 23, 42, 0.2) 100%
         );
         z-index: -1;
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     }
 
     .hero-content {
@@ -111,7 +115,7 @@
         align-items: flex-start;
         gap: 1.5rem;
         max-width: 600px;
-        grid-column: 1; /* Force to left column */
+        grid-column: 1;
     }
 
     .pre-title {
@@ -180,19 +184,6 @@
         transform: scale(0.98);
     }
 
-    @keyframes cinematicFadeIn {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-            filter: blur(5px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-            filter: blur(0);
-        }
-    }
-
     /* Area Biodata Glassmorphism */
     .biodata-card {
         margin-top: 2rem;
@@ -217,206 +208,11 @@
         margin-bottom: 0.8rem;
         font-family: "Courier New", monospace;
         font-size: 0.85rem;
-        gap: 1.5rem; /* Memberikan spasi yang jelas antara label dan nilai */
-    }
-
-    .biodata-label {
-        color: #60a5fa; /* Biru terang */
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-
-    .biodata-val {
-        color: var(--clr-white);
-        text-align: right;
-    }
-
-    .biodata-catchphrase {
-        margin-top: 1.2rem;
-        padding-top: 1.2rem;
-        border-top: 1px dashed rgba(255, 255, 255, 0.2);
-        font-family: var(--font-body);
-        font-style: italic;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.5;
-    }
-
-    @media (max-width: 900px) {
-        .biodata-card {
-            margin-top: 2rem;
-            width: 100%;
-            max-width: 100%;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .hero-section {
-            display: flex;
-            justify-content: center;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 5rem;
-            flex-direction: column;
-        }
-        .hero-content {
-            text-align: center;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .video-overlay {
-            background: linear-gradient(
-                to bottom,
-                rgba(15, 23, 42, 0.8) 0%,
-                rgba(15, 23, 42, 0.9) 100%
-            );
-        }
-        @keyframes cinematicFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-                filter: blur(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                filter: blur(0);
-    }
-
-    .video-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            to right,
-            rgba(15, 23, 42, 1) 0%,
-            rgba(15, 23, 42, 0.7) 40%,
-            rgba(15, 23, 42, 0.2) 100%
-        );
-        z-index: -1;
-    }
-
-    .hero-content {
-        text-align: left;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
         gap: 1.5rem;
-        max-width: 600px;
-        grid-column: 1; /* Force to left column */
-    }
-
-    .pre-title {
-        font-family: 'Archivo', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: clamp(1rem, 2vw, 1.5rem);
-        color: var(--clr-blue-light);
-        letter-spacing: 1px;
-        opacity: 0;
-        animation: cinematicFadeIn 2.5s ease-out 0.2s forwards;
-        margin-bottom: -1rem;
-    }
-
-    .title {
-        font-family: 'Cabinet Grotesk', sans-serif;
-        font-size: clamp(3.5rem, 8vw, 7rem);
-        font-weight: 800;
-        letter-spacing: -0.05em;
-        text-transform: uppercase;
-        margin: 0;
-        text-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
-        opacity: 0;
-        animation: cinematicFadeIn 2s ease-out 0.8s forwards;
-    }
-
-    .subtitle {
-        font-size: clamp(1rem, 1.5vw, 1.2rem);
-        font-weight: 300;
-        letter-spacing: 0.1em;
-        opacity: 0;
-        line-height: 1.8;
-        animation: cinematicFadeIn 2.5s ease-out 1.5s forwards;
-        color: rgba(255, 255, 255, 0.8);
-        max-width: 500px;
-    }
-
-    .hashtag-wrapper {
-        margin-top: 1.5rem;
-        opacity: 0;
-        display: flex;
-        gap: 1rem;
-        animation: cinematicFadeIn 2s ease-out 2.2s forwards;
-    }
-
-    .hashtag {
-        font-size: 0.9rem;
-        font-family: var(--font-body);
-        font-weight: 500;
-        color: var(--clr-white);
-        letter-spacing: 0.1em;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 0.8rem 2rem;
-        transition: all 0.4s ease;
-        backdrop-filter: blur(5px);
-        text-transform: uppercase;
-        display: inline-block;
-        border-radius: var(--radius-global);
-        cursor: pointer;
-    }
-
-    .hashtag:hover {
-        background: var(--clr-blue-accent);
-        border-color: var(--clr-blue-accent);
-        box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
-        transform: scale(0.98);
-    }
-
-    @keyframes cinematicFadeIn {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-            filter: blur(5px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-            filter: blur(0);
-        }
-    }
-
-    /* Area Biodata Glassmorphism */
-    .biodata-card {
-        margin-top: 2rem;
-        background: rgba(15, 23, 42, 0.4);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1.5rem;
-        border-radius: var(--radius-global, 12px);
-        width: 100%;
-        max-width: 450px;
-        z-index: 10;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        animation: cinematicFadeIn 2s ease-out 2.5s forwards;
-    }
-
-    .biodata-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.8rem;
-        font-family: "Courier New", monospace;
-        font-size: 0.85rem;
-        gap: 1.5rem; /* Memberikan spasi yang jelas antara label dan nilai */
     }
 
     .biodata-label {
-        color: #60a5fa; /* Biru terang */
+        color: #60a5fa;
         font-weight: 600;
         letter-spacing: 1px;
     }
@@ -437,6 +233,19 @@
         line-height: 1.5;
     }
 
+    @keyframes cinematicFadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+            filter: blur(5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+            filter: blur(0);
+        }
+    }
+
     @media (max-width: 900px) {
         .biodata-card {
             margin-top: 2rem;
@@ -448,35 +257,118 @@
     @media (max-width: 768px) {
         .hero-section {
             display: flex;
-            justify-content: center;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 5rem;
             flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 5rem;
+            padding-bottom: 2rem;
+            width: 100%;
+            min-height: 100dvh;
         }
+
         .hero-content {
-            text-align: center;
-            align-items: center;
-            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            gap: 1.25rem;
+            margin-bottom: 0;
+            margin-left: 0;
         }
+
+        .pre-title {
+            text-align: left;
+            font-size: 0.95rem;
+            margin-bottom: -0.5rem;
+            align-self: flex-start;
+        }
+
+        .title {
+            text-align: left;
+            font-size: clamp(2.5rem, 10vw, 4rem);
+            line-height: 1.05;
+            align-self: flex-start;
+            word-break: break-word;
+        }
+
+        .subtitle {
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            max-width: 480px;
+            align-self: flex-start;
+        }
+
+        .hashtag-wrapper {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            width: 100%;
+            align-self: flex-start;
+        }
+
+        .hashtag {
+            padding: 0.6rem 1.25rem;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .biodata-card {
+            margin-top: 0.5rem;
+            padding: 1.25rem;
+            width: 100%;
+            max-width: 360px;
+            text-align: left;
+            align-self: flex-start;
+            margin-left: 0;
+        }
+
+        .biodata-item {
+            font-size: 0.8rem;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .biodata-label {
+            text-align: left;
+        }
+
+        .biodata-val {
+            text-align: right;
+            font-size: 0.8rem;
+        }
+
+        .biodata-catchphrase {
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            text-align: left;
+        }
+
+        .background-video {
+            object-fit: cover;
+            object-position: center center;
+            z-index: -2;
+        }
+
         .video-overlay {
             background: linear-gradient(
                 to bottom,
-                rgba(15, 23, 42, 0.8) 0%,
-                rgba(15, 23, 42, 0.9) 100%
+                rgba(15, 23, 42, 0.75) 0%,
+                rgba(15, 23, 42, 0.85) 60%,
+                rgba(15, 23, 42, 0.95) 100%
             );
-        }
-        @keyframes cinematicFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-                filter: blur(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                filter: blur(0);
-            }
+            z-index: -1;
         }
     }
 </style>
