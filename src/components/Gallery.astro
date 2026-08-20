@@ -28,6 +28,17 @@ const folders = [
 
     <!-- NoArt Layout -->
     <div class="noart-layout">
+        
+        <!-- MOBILE TOP NAV -->
+        <div class="mobile-nav-top">
+            <span class="col-header">■ ARCHIVES</span>
+            <div class="mobile-carousel-controls">
+                <button class="nav-arrow" id="prev-folder">&lt;</button>
+                <span class="active-folder" id="active-folder-text">[1] INSTAGRAM</span>
+                <button class="nav-arrow" id="next-folder">&gt;</button>
+            </div>
+        </div>
+
         <!-- LEFT: Folder Titles -->
         <div class="noart-left">
             <h4 class="col-header">■ ARCHIVES</h4>
@@ -67,6 +78,15 @@ const folders = [
                     </li>
                 ))}
             </ul>
+        </div>
+        
+        <!-- MOBILE BOTTOM NAV -->
+        <div class="mobile-nav-bottom">
+            <div class="mobile-carousel-controls">
+                <button class="nav-arrow" id="date-prev">&lt;</button>
+                <span class="active-date" id="active-date-text">AUGUST 2026</span>
+                <button class="nav-arrow" id="date-next">&gt;</button>
+            </div>
         </div>
     </div>
 
@@ -128,14 +148,79 @@ const folders = [
         align-items: center;
     }
 
+    .mobile-nav-top, .mobile-nav-bottom {
+        display: none;
+    }
+
     /* Responsive adjustment */
     @media (max-width: 900px) {
         .noart-layout {
             grid-template-columns: 1fr;
             height: auto;
+            gap: 1rem;
         }
         .noart-left, .noart-right {
             display: none; /* Hide sidebars on mobile, or redesign */
+        }
+        .mobile-nav-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 50;
+        }
+        .mobile-nav-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 50;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .noart-left, .noart-right {
+            display: none !important;
+        }
+
+        .mobile-nav-top .col-header {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+        
+        .mobile-carousel-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .active-folder, .active-date {
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+            color: var(--clr-silver);
+            letter-spacing: 1px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav-arrow {
+            background: transparent;
+            border: none;
+            color: var(--clr-white);
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            padding: 10px 15px;
+            margin: 0;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-arrow:active {
+            transform: scale(0.9);
+            color: var(--clr-silver);
         }
     }
 
@@ -371,13 +456,38 @@ const folders = [
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    const initGallery = () => {
+        // Mobile Carousel Shared States
+        const folderIds = ['instagram', 'pap', 'live', 'show'];
+        const folderNames = ['[1] INSTAGRAM', '[2] PAP', '[3] LIVE', '[4] SHOW'];
+        const dateNames = ['AUGUST 2026', 'SEPTEMBER 2026', 'OCTOBER 2026', 'NOVEMBER 2026'];
+        
+        let currentFolderIdx = 0;
+        let currentDateIdx = 0;
+        
+        const activeFolderText = document.getElementById('active-folder-text');
+        const activeDateText = document.getElementById('active-date-text');
+
         // --- 1. NoArt Infinite Vertical Scroll & Sync ---
         const scrollContainer = document.getElementById('folder-scroll-container');
         const sets = document.querySelectorAll('.scroll-set');
         const wrappers = document.querySelectorAll('.center-img-wrapper');
         const leftItems = document.querySelectorAll('#left-nav .nav-item');
         const rightItems = document.querySelectorAll('#right-nav .nav-item');
+
+        const scrollToFolder = (idx) => {
+            if (scrollContainer && sets.length > 1) {
+                const targetId = folderIds[idx];
+                const targetWrapper = sets[1].querySelector(`.center-img-wrapper[data-folder-id="${targetId}"]`);
+                if (targetWrapper) {
+                    const foldersArray = Array.from(sets[1].children);
+                    const folderIndex = foldersArray.indexOf(targetWrapper);
+                    const setHeight = sets[0].offsetHeight;
+                    const targetScrollTop = setHeight + (folderIndex * targetWrapper.offsetHeight);
+                    scrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+                }
+            }
+        };
 
         if (scrollContainer && sets.length === 3) {
             const setHeight = sets[0].offsetHeight;
@@ -405,6 +515,15 @@ const folders = [
                     const activeId = closestWrapper.getAttribute('data-folder-id');
                     leftItems.forEach(item => item.classList.toggle('active', item.getAttribute('data-id') === activeId));
                     rightItems.forEach(item => item.classList.toggle('active', item.getAttribute('data-id') === activeId));
+
+                    // Sync mobile text
+                    const fIdx = folderIds.indexOf(activeId);
+                    if (fIdx !== -1) {
+                        currentFolderIdx = fIdx;
+                        currentDateIdx = fIdx;
+                        if (activeFolderText) activeFolderText.textContent = folderNames[fIdx];
+                        if (activeDateText) activeDateText.textContent = dateNames[fIdx];
+                    }
                 }
             };
 
@@ -615,5 +734,49 @@ const folders = [
                 closeBtn.click();
             }
         });
-    });
+
+        // --- 4. Mobile Carousel Navigation ---
+        const prevFolderBtn = document.getElementById('prev-folder');
+        const nextFolderBtn = document.getElementById('next-folder');
+
+        if (prevFolderBtn && nextFolderBtn) {
+            nextFolderBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nextIdx = (currentFolderIdx + 1) % folderNames.length;
+                scrollToFolder(nextIdx);
+            });
+
+            prevFolderBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const prevIdx = (currentFolderIdx - 1 + folderNames.length) % folderNames.length;
+                scrollToFolder(prevIdx);
+            });
+        }
+
+        // Date Carousel Logic 
+        const prevDateBtn = document.getElementById('date-prev');
+        const nextDateBtn = document.getElementById('date-next');
+
+        if (prevDateBtn && nextDateBtn) {
+            nextDateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nextIdx = (currentDateIdx + 1) % dateNames.length;
+                scrollToFolder(nextIdx);
+            });
+
+            prevDateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const prevIdx = (currentDateIdx - 1 + dateNames.length) % dateNames.length;
+                scrollToFolder(prevIdx);
+            });
+        }
+    };
+
+    // Eksekusi script dengan aman di environment Astro
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGallery);
+    } else {
+        initGallery();
+    }
+    document.addEventListener('astro:page-load', initGallery);
 </script>
